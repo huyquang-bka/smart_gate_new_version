@@ -1,7 +1,7 @@
-import 'package:clean_store_app/core/configs/app_theme.dart';
-import 'package:clean_store_app/features/account/presentation/pages/account_page.dart';
-import 'package:clean_store_app/features/dashboard/presentation/pages/dashboard_page.dart';
-import 'package:clean_store_app/features/seal/presentation/pages/seal_page.dart';
+import 'package:smart_gate_new_version/core/configs/app_theme.dart';
+import 'package:smart_gate_new_version/features/account/presentation/pages/account_page.dart';
+import 'package:smart_gate_new_version/features/dashboard/presentation/pages/dashboard_page.dart';
+import 'package:smart_gate_new_version/features/seal/presentation/pages/seal_page.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 

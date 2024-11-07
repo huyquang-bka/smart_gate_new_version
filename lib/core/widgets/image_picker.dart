@@ -1,8 +1,8 @@
 import 'dart:io';
-
-import 'package:clean_store_app/core/configs/app_theme.dart';
+import 'package:smart_gate_new_version/core/configs/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ImagePickerWidget extends StatefulWidget {
   final int index;
@@ -81,6 +81,8 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return GestureDetector(
       onTap: () {
         _seal1Focus.unfocus();
@@ -146,7 +148,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
                       ? null
                       : () => _getImageFromSource(ImageSource.camera),
                   icon: const Icon(Icons.camera_alt),
-                  tooltip: 'Take Photo',
+                  tooltip: l10n.takePhoto,
                   color: AppTheme.primaryColor,
                 ),
                 IconButton(
@@ -154,7 +156,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
                       ? null
                       : () => _getImageFromSource(ImageSource.gallery),
                   icon: const Icon(Icons.photo_library),
-                  tooltip: 'Choose from Gallery',
+                  tooltip: l10n.chooseFromGallery,
                   color: AppTheme.primaryColor,
                 ),
                 if (image != null)
@@ -175,7 +177,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
                 // Dangerous toggle
                 Row(
                   children: [
-                    const Text('Dangerous'),
+                    Text(l10n.dangerous),
                     Switch(
                       value: widget.isDangerous,
                       onChanged: _isLoading ? null : widget.onDangerousChanged,
@@ -192,7 +194,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
               focusNode: _seal1Focus,
               enabled: !_isLoading,
               decoration: InputDecoration(
-                labelText: 'Seal Number 1',
+                labelText: l10n.sealNumber(widget.index),
                 border: const OutlineInputBorder(),
                 suffixIcon: Icon(
                   Icons.qr_code,
@@ -207,7 +209,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
               focusNode: _seal2Focus,
               enabled: !_isLoading,
               decoration: InputDecoration(
-                labelText: 'Seal Number 2',
+                labelText: l10n.sealNumber(widget.index),
                 border: const OutlineInputBorder(),
                 suffixIcon: Icon(
                   Icons.qr_code,

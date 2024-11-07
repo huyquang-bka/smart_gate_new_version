@@ -1,39 +1,34 @@
+import 'package:flutter/material.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 import 'dart:convert';
 import 'dart:async';
 
 class MqttService {
-  final String broker;
-  final int port;
-  final String clientId;
-  final String username;
-  final String password;
-  final String topic;
+  static const String _broker = '27.72.98.49';
+  static const int _port = 58883;
+  static const String _username = 'admin';
+  static const String _password = 'admin';
+  final String _clientId = DateTime.now().millisecondsSinceEpoch.toString();
+
   late MqttServerClient client;
   Timer? _reconnectTimer;
   bool _isConnected = false;
 
-  MqttService({
-    required this.broker,
-    required this.port,
-    required this.clientId,
-    required this.username,
-    required this.password,
-    required this.topic,
-  });
-
-  Future<void> connect() async {
-    client = MqttServerClient(broker, clientId);
-    client.port = port;
+  MqttService() {
+    client = MqttServerClient(_broker, _clientId);
+    client.port = _port;
     client.keepAlivePeriod = 30;
     client.onConnected = _onConnected;
     client.onDisconnected = _onDisconnected;
     client.onSubscribed = _onSubscribed;
+  }
+
+  Future<void> connect() async {
     client.setProtocolV311();
 
     final connMessage = MqttConnectMessage()
-        .withClientIdentifier(clientId)
+        .withClientIdentifier(_clientId)
         .withWillTopic('willtopic')
         .withWillMessage('My Will message')
         .startClean()
@@ -42,7 +37,7 @@ class MqttService {
     client.connectionMessage = connMessage;
 
     try {
-      await client.connect(username, password);
+      await client.connect(_username, _password);
     } on Exception catch (e) {
       print('EXCEPTION: $e');
       client.disconnect();
@@ -50,12 +45,12 @@ class MqttService {
     }
 
     if (client.connectionStatus!.state == MqttConnectionState.connected) {
-      print('Connected to $broker:$port as $clientId - subscribing to $topic');
+      debugPrint('Connected to $_broker:$_port as $_clientId');
       _isConnected = true;
       _stopReconnectTimer();
     } else {
       print(
-          'Connection failed - disconnecting client $clientId from broker $broker on port $port');
+          'Connection failed - disconnecting client $_clientId from broker $_broker on port $_port');
       client.disconnect();
       _startReconnectTimer();
     }
@@ -65,7 +60,6 @@ class MqttService {
     print('Connected');
     _isConnected = true;
     _stopReconnectTimer();
-    // client.subscribe(topic, MqttQos.atLeastOnce);
   }
 
   void _onDisconnected() {
@@ -110,3 +104,5 @@ class MqttService {
     client.disconnect();
   }
 }
+
+final mqttService = MqttService();

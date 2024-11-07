@@ -1,4 +1,4 @@
-import 'package:clean_store_app/features/seal/domain/models/seal.dart';
+import 'package:smart_gate_new_version/features/seal/domain/models/seal.dart';
 
 class ContainerHarbor {
   final String checkPointId;

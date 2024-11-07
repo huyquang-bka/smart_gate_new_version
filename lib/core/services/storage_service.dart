@@ -1,5 +1,5 @@
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:clean_store_app/core/configs/app_key.dart';
+import 'package:smart_gate_new_version/core/configs/app_key.dart';
 
 class StorageService {
   static Future<void> saveLoginCredentials({
@@ -29,7 +29,8 @@ class StorageService {
       final username = prefs.getString(AppKey.savedUsername) ?? '';
       final password = prefs.getString(AppKey.savedPassword) ?? '';
 
-      print('Retrieved credentials - Remember Me: $rememberMe, Has Username: ${username.isNotEmpty}'); // Debug print
+      print(
+          'Retrieved credentials - Remember Me: $rememberMe, Has Username: ${username.isNotEmpty}'); // Debug print
 
       return {
         'rememberMe': rememberMe,

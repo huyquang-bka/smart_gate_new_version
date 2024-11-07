@@ -1,7 +1,7 @@
-name: clean_store_app
-description: A clean architecture store application
+name: smart_gate_new_version
+description: "A new Flutter project."
 publish_to: 'none'
-version: 1.0.0+1
+version: 1.0.2
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
@@ -23,18 +23,31 @@ dependencies:
   freezed_annotation: ^2.4.1
   # JSON serialization
   json_annotation: ^4.8.1
-  url_launcher: ^6.2.5
   shared_preferences: ^2.2.2
   http: ^1.2.2
   mqtt_client: ^10.5.1
   image_picker: ^1.0.7
+  url_launcher: ^6.3.1
   package_info_plus: ^8.1.0
-  
+  intl: ^0.19.0
+  provider: ^6.1.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.0
   json_serializable: ^6.7.1
+  flutter_launcher_icons: ^0.14.1
 
 flutter:
   uses-material-design: true
+  generate: true # Enable generation of localization files
+
+  assets:
+    - lib/assets/icons/logo/CHP_logo.png
+    - lib/assets/icons/logo/CHP_logo.jpg
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "lib/assets/icons/logo/CHP_logo.jpg"

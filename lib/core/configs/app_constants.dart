@@ -2,7 +2,14 @@ class AppConstants {
   // App Information
   static const String appName = 'Smart Gate';
   static const String appVersion = '1.0.0';
+  static const String userGithub = 'huyquang-bka';
+  static const String repoName = 'smart_gate_new_version';
+  static const String adminEmail = 'admin@atin.com.vn';
 
+  // Company Information
+  static const String companyName = 'ATIN';
+  static const String companyWebsite = 'https://atin.com.vn';
+  static const String copyright = '© 2024 ATIN. All rights reserved.';
   // API Endpoints
   static const String baseUrl = 'https://api.example.com';
   static const int apiTimeout = 30000; // milliseconds
@@ -31,7 +38,4 @@ class AppConstants {
   static const String defaultErrorMessage = 'Something went wrong';
   static const String networkErrorMessage = 'Network connection error';
   static const String unauthorizedMessage = 'Unauthorized access';
-
-  // Contact Information
-  static const String adminEmail = 'admin@cleanstore.com';
 }

@@ -1,0 +1,236 @@
+{
+  "appName": "Smart Gate",
+  
+  "@_LOGIN": {},
+  "login": "Login",
+  "username": "Username",
+  "password": "Password",
+  "enterUsername": "Enter your username",
+  "enterPassword": "Enter your password",
+  "rememberMe": "Remember me",
+  "contactAdmin": "Contact admin",
+  "noAccount": "Don't have an account yet?",
+
+  "@_ACCOUNT": {},
+  "account": "Account",
+  "fullName": "Full Name",
+  "userId": "User ID: {id}",
+  "@userId": {
+    "placeholders": {
+      "id": {}
+    }
+  },
+  "companyId": "Company ID: {id}",
+  "@companyId": {
+    "placeholders": {
+      "id": {}
+    }
+  },
+  "logout": "Logout",
+  "logoutConfirm": "Are you sure you want to logout?",
+  "cancel": "Cancel",
+  "copyright": "© 2024 ATIN. All rights reserved.",
+
+  "@_SEAL": {},
+  "sealScanner": "Seal Information",
+  "checkpointInfo": "Checkpoint Information",
+  "selectCheckpoint": "Select Checkpoint",
+  "code": "Code: {code}",
+  "@code": {
+    "placeholders": {
+      "code": {}
+    }
+  },
+  "lane": "Lane: {lane}",
+  "@lane": {
+    "placeholders": {
+      "lane": {}
+    }
+  },
+  "container": "Container {index}",
+  "@container": {
+    "placeholders": {
+      "index": {}
+    }
+  },
+  "sealNumber": "Seal Number {index}",
+  "@sealNumber": {
+    "placeholders": {
+      "index": {}
+    }
+  },
+  "dangerous": "Dangerous",
+  "takePhoto": "Take Photo",
+  "chooseFromGallery": "Choose from Gallery",
+  "deletePhoto": "Delete Photo",
+  "send": "Send",
+  "sending": "Sending data...",
+  "success": "Success",
+  "error": "Error",
+  "dataSent": "Data sent successfully",
+  "sendFailed": "Failed to send data: {error}",
+  "@sendFailed": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "loadingProfile": "Loading profile...",
+  "errorLoadingProfile": "Error loading profile",
+
+  "@_LOGIN_ERRORS": {},
+  "loginFailed": "Invalid username or password",
+  "networkError": "Network error. Please check your connection",
+  "ok": "OK",
+  "error": "Error",
+  "loading": "Loading...",
+  "emailLaunchError": "Could not launch email",
+  "requestAccess": "Request for Account Access - {appName}",
+  "@requestAccess": {
+    "placeholders": {
+      "appName": {}
+    }
+  },
+
+  "@_DASHBOARD": {},
+  "dashboard": "Dashboard",
+  "currentVersion": "Current Version: {version}",
+  "@currentVersion": {
+    "placeholders": {
+      "version": {}
+    }
+  },
+
+  "@_SEAL_PAGE": {},
+  "invalidCheckpoint": "Invalid Checkpoint",
+  "selectValidCheckpoint": "Please select a valid checkpoint before sending data",
+  "incompleteData": "Incomplete Data",
+  "fillSealData": "Please fill in at least Seal 1 for Container 1",
+  "sendingData": "Sending data...",
+  "dataSentSuccess": "Data sent successfully",
+  "dataSentError": "Error sending data: {error}",
+  "@dataSentError": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "errorLoadingCheckpoints": "Error loading checkpoints: {error}",
+  "@errorLoadingCheckpoints": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "unknown": "Unknown",
+  "unknownCode": "UNKNOWN",
+  "checkpointCode": "Code: {code}",
+  "@checkpointCode": {
+    "placeholders": {
+      "code": {}
+    }
+  },
+  "checkpointLane": "Lane: {lane}",
+  "@checkpointLane": {
+    "placeholders": {
+      "lane": {}
+    }
+  },
+  "selectCheckpoint": "Select Checkpoint",
+  "cancel": "Cancel",
+  "ok": "OK",
+  "warning": "Warning",
+  "error": "Error",
+  "success": "Success",
+
+  "@_MQTT": {},
+  "mqttConnected": "MQTT Connected",
+  "mqttConnectionError": "Error connecting to MQTT: {error}",
+  "@mqttConnectionError": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "readyToSend": "Ready to send data",
+  "sendingMqtt": "Sending MQTT message",
+
+  "@_SEAL_VALIDATION": {},
+  "noCheckpoint": "No checkpoint selected",
+  "invalidSeal": "Invalid seal data",
+  "sealRequired": "At least one seal is required",
+  "checkpointRequired": "Please select a checkpoint first",
+
+  "@_SEAL_INPUTS": {},
+  "seal1": "Seal Number 1",
+  "seal2": "Seal Number 2",
+  "container": "Container {index}",
+  "@container": {
+    "placeholders": {
+      "index": {}
+    }
+  },
+  "dangerous": "Dangerous",
+  "takePhoto": "Take Photo",
+  "chooseFromGallery": "Choose from Gallery",
+  "deletePhoto": "Delete Photo",
+  "previewPhoto": "Preview Photo",
+  "closePreview": "Close Preview",
+  "recognizingText": "Recognizing text...",
+  "recognitionFailed": "Failed to recognize text",
+  "recognitionError": "Error during text recognition: {error}",
+  "@recognitionError": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "pickImageError": "Error picking image: {error}",
+  "@pickImageError": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+
+  "@_DIALOG_TITLES": {},
+  "warning": "Warning",
+  "error": "Error",
+  "success": "Success",
+
+  "@_DIALOG_MESSAGES": {},
+  "invalidCheckpoint": "Invalid Checkpoint",
+  "selectValidCheckpoint": "Please select a valid checkpoint before sending data",
+  "fillSealData": "Please fill in at least Seal 1 for Container 1",
+  "sendingData": "Sending data...",
+  "dataSent": "Data sent successfully",
+  "sendFailed": "Failed to send data: {error}",
+  "@sendFailed": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "errorLoadingCheckpoints": "Error loading checkpoints: {error}",
+  "@errorLoadingCheckpoints": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+
+  "@_ACCOUNT_PAGE": {},
+  "account": "Account",
+  "userId": "User ID: {id}",
+  "@userId": {
+    "placeholders": {
+      "id": {}
+    }
+  },
+  "username": "Username",
+  "fullName": "Full Name",
+  "companyId": "Company ID: {id}",
+  "@companyId": {
+    "placeholders": {
+      "id": {}
+    }
+  },
+  "companyIdTitle": "Company ID",
+  "errorLoadingAuth": "Error loading profile data",
+  "logout": "Logout",
+  "logoutConfirm": "Are you sure you want to logout?",
+  "cancel": "Cancel",
+  "loading": "Loading..."
+} 

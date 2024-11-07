@@ -1,7 +1,8 @@
-import 'package:clean_store_app/core/configs/app_theme.dart';
-import 'package:clean_store_app/features/seal/domain/models/seal.dart';
-import 'package:clean_store_app/features/seal/widgets/image_picker.dart';
+import 'package:smart_gate_new_version/core/configs/app_theme.dart';
+import 'package:smart_gate_new_version/features/seal/domain/models/seal.dart';
+import 'package:smart_gate_new_version/features/seal/widgets/image_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SealContainerPicker extends StatelessWidget {
   final int index;
@@ -33,6 +34,8 @@ class SealContainerPicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Column(
       children: [
         Container(
@@ -46,7 +49,7 @@ class SealContainerPicker extends StatelessWidget {
             borderRadius: BorderRadius.circular(20),
           ),
           child: Text(
-            'Container $index',
+            l10n.container(index),
             style: const TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.bold,

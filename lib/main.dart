@@ -1,41 +1,52 @@
-import 'package:clean_store_app/core/configs/app_constants.dart';
-import 'package:clean_store_app/core/configs/app_theme.dart';
-import 'package:clean_store_app/core/middleware/auth_middleware_page.dart';
-import 'package:clean_store_app/core/providers/app_settings_provider.dart';
-import 'package:clean_store_app/core/routes/routes.dart';
-import 'package:clean_store_app/features/auth/presentation/pages/login_page.dart';
-import 'package:clean_store_app/features/main/presentation/pages/main_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:smart_gate_new_version/core/configs/app_constants.dart';
+import 'package:smart_gate_new_version/core/configs/app_theme.dart';
+import 'package:smart_gate_new_version/core/middleware/auth_middleware_page.dart';
+import 'package:smart_gate_new_version/core/providers/language_provider.dart';
+import 'package:smart_gate_new_version/core/routes/routes.dart';
+import 'package:smart_gate_new_version/core/services/mqtt_service.dart';
+import 'package:smart_gate_new_version/features/auth/presentation/pages/login_page.dart';
+import 'package:smart_gate_new_version/features/main/presentation/pages/main_page.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  // Initialize MQTT service
+  mqttService.connect();
+
   runApp(
-    const ProviderScope(
-      child: MyApp(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => LanguageProvider()),
+      ],
+      child: const MyApp(),
     ),
   );
 }
 
-class MyApp extends ConsumerWidget {
+class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final themeMode = ref.watch(themeProvider);
-    final language = ref.watch(languageProvider);
-
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: AppConstants.appName,
-      theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
-      themeMode: themeMode,
-      locale: language.locale,
-      initialRoute: Routes.initial,
-      routes: {
-        Routes.initial: (context) => const AuthMiddlewarePage(),
-        Routes.login: (context) => const LoginPage(),
-        Routes.main: (context) => const MainPage(),
+  Widget build(BuildContext context) {
+    return Consumer<LanguageProvider>(
+      builder: (context, languageProvider, _) {
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: AppConstants.appName,
+          theme: AppTheme.lightTheme,
+          darkTheme: AppTheme.darkTheme,
+          locale: languageProvider.currentLanguage.locale,
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          initialRoute: Routes.initial,
+          routes: {
+            Routes.initial: (context) => const AuthMiddlewarePage(),
+            Routes.login: (context) => const LoginPage(),
+            Routes.main: (context) => const MainPage(),
+          },
+        );
       },
     );
   }

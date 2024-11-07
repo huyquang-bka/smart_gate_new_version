@@ -1,8 +1,9 @@
-import 'package:clean_store_app/core/configs/api_route.dart';
-import 'package:clean_store_app/core/configs/app_theme.dart';
+import 'package:smart_gate_new_version/core/configs/api_route.dart';
+import 'package:smart_gate_new_version/core/configs/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'dart:convert';
 import 'dart:io';
 
@@ -182,6 +183,8 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return GestureDetector(
       onTap: () {
         _seal1Focus.unfocus();
@@ -221,7 +224,6 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
                               child: Image.file(
                                 image!,
                                 fit: BoxFit.contain,
-                                // width: double.infinity,
                               ),
                             ),
                           ),
@@ -259,7 +261,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
                         ? null
                         : () => _getImageFromSource(ImageSource.camera),
                     icon: const Icon(Icons.camera_alt),
-                    tooltip: 'Take Photo',
+                    tooltip: l10n.takePhoto,
                     color: AppTheme.primaryColor,
                   ),
                 ),
@@ -277,7 +279,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
                         ? null
                         : () => _getImageFromSource(ImageSource.gallery),
                     icon: const Icon(Icons.photo_library),
-                    tooltip: 'Choose from Gallery',
+                    tooltip: l10n.chooseFromGallery,
                     color: AppTheme.primaryColor,
                   ),
                 ),
@@ -305,7 +307,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
                               widget.onSeal2NumberChanged('');
                             },
                       icon: const Icon(Icons.delete),
-                      tooltip: 'Delete Photo',
+                      tooltip: l10n.deletePhoto,
                       color: Colors.red,
                     ),
                   ),
@@ -313,7 +315,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
                 const Spacer(),
                 Row(
                   children: [
-                    const Text('Dangerous'),
+                    Text(l10n.dangerous),
                     Switch(
                       value: widget.isDangerous,
                       onChanged: _isLoading ? null : widget.onDangerousChanged,
@@ -328,10 +330,10 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
               controller: _seal1Controller,
               focusNode: _seal1Focus,
               enabled: !_isLoading,
-              decoration: const InputDecoration(
-                labelText: 'Seal 1',
-                border: OutlineInputBorder(),
-                suffixIcon: Icon(Icons.qr_code),
+              decoration: InputDecoration(
+                labelText: l10n.seal1,
+                border: const OutlineInputBorder(),
+                suffixIcon: const Icon(Icons.qr_code),
               ),
               onChanged: widget.onSeal1NumberChanged,
             ),
@@ -340,10 +342,10 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
               controller: _seal2Controller,
               focusNode: _seal2Focus,
               enabled: !_isLoading,
-              decoration: const InputDecoration(
-                labelText: 'Seal 2',
-                border: OutlineInputBorder(),
-                suffixIcon: Icon(Icons.qr_code),
+              decoration: InputDecoration(
+                labelText: l10n.seal2,
+                border: const OutlineInputBorder(),
+                suffixIcon: const Icon(Icons.qr_code),
               ),
               onChanged: widget.onSeal2NumberChanged,
             ),

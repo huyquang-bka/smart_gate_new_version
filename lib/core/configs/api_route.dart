@@ -57,8 +57,4 @@ class Url {
 
   // File Service
   static const String fileService = "${ApiRoute.baseUrl}/Service/files";
-
-  // Version Checker
-  static const String versionChecker =
-      "https://api.github.com/repos/YOUR_USERNAME/YOUR_REPO/releases/latest";
 }

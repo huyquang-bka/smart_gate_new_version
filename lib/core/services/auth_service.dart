@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:clean_store_app/core/configs/app_key.dart';
+import 'package:smart_gate_new_version/core/configs/app_key.dart';
 
 class Auth {
   String accessToken;

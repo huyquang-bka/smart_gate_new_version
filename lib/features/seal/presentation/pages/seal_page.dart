@@ -1,14 +1,14 @@
 import 'dart:convert';
-import 'package:clean_store_app/core/configs/api_route.dart';
-import 'package:clean_store_app/core/configs/app_theme.dart';
-import 'package:clean_store_app/core/routes/routes.dart';
-import 'package:clean_store_app/core/services/auth_service.dart';
-import 'package:clean_store_app/core/services/custom_http_client.dart';
-import 'package:clean_store_app/core/services/mqtt_service.dart';
-import 'package:clean_store_app/features/seal/domain/models/check_point.dart';
-import 'package:clean_store_app/features/seal/domain/models/container_harbor.dart';
-import 'package:clean_store_app/features/seal/widgets/seal_container_picker.dart';
+import 'package:smart_gate_new_version/core/configs/api_route.dart';
+import 'package:smart_gate_new_version/core/configs/app_theme.dart';
+import 'package:smart_gate_new_version/core/services/auth_service.dart';
+import 'package:smart_gate_new_version/core/services/custom_http_client.dart';
+import 'package:smart_gate_new_version/core/services/mqtt_service.dart';
+import 'package:smart_gate_new_version/features/seal/domain/models/check_point.dart';
+import 'package:smart_gate_new_version/features/seal/domain/models/container_harbor.dart';
+import 'package:smart_gate_new_version/features/seal/widgets/seal_container_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SealPage extends StatefulWidget {
   const SealPage({super.key});
@@ -18,15 +18,7 @@ class SealPage extends StatefulWidget {
 }
 
 class _SealPageState extends State<SealPage> {
-  // Mqtt service
-  late MqttService mqttService;
   static const String _baseTopic = 'Event/Seal';
-  static const String _broker = '27.72.98.49';
-  static const int _port = 58883;
-  static const String _username = 'admin';
-  static const String _password = 'admin';
-  final String _clientId = DateTime.now().millisecondsSinceEpoch.toString();
-
   // Container harbor
   ContainerHarbor? containerHarbor;
   CheckPoint? selectedCheckPoint;
@@ -34,33 +26,9 @@ class _SealPageState extends State<SealPage> {
   bool isLoading = true;
 
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     _loadCheckPoints();
-    _initializeMqtt();
-  }
-
-  @override
-  void dispose() {
-    mqttService.disconnect();
-    super.dispose();
-  }
-
-  Future<void> _initializeMqtt() async {
-    try {
-      mqttService = MqttService(
-        broker: _broker,
-        port: _port,
-        clientId: _clientId,
-        username: _username,
-        password: _password,
-        topic: _baseTopic,
-      );
-      await mqttService.connect();
-      print('MQTT Connected');
-    } catch (e) {
-      print('Error connecting to MQTT: $e');
-    }
   }
 
   Future<void> _onCheckPointSelected(CheckPoint checkpoint) async {
@@ -85,7 +53,7 @@ class _SealPageState extends State<SealPage> {
       final response = await customHttpClient.get(Url.getCheckPoint);
 
       if (response.statusCode == 200) {
-        final List<dynamic> data = jsonDecode(response.body)["data"];
+        final List<dynamic> data = json.decode(response.body)["data"];
         final allCheckPoints = data
             .map((json) => CheckPoint.fromJson(json))
             .where((checkpoint) => checkpoint.compId == auth.compId)
@@ -105,15 +73,28 @@ class _SealPageState extends State<SealPage> {
     } catch (e) {
       setState(() => isLoading = false);
       if (mounted) {
+        final l10n = AppLocalizations.of(context)!;
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            title: const Text('Error'),
-            content: Text('Error loading checkpoints: $e'),
+            title: Row(
+              children: [
+                const Icon(Icons.error, color: Colors.red),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    l10n.error,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
+            content: Text(l10n.errorLoadingCheckpoints(e.toString())),
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: const Text('OK'),
+                child: Text(l10n.ok),
               ),
             ],
           ),
@@ -123,7 +104,37 @@ class _SealPageState extends State<SealPage> {
   }
 
   Future<void> _handleSend() async {
+    final l10n = AppLocalizations.of(context)!;
     if (containerHarbor == null) return;
+
+    if (selectedCheckPoint == null || selectedCheckPoint!.name == 'Unknown') {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Row(
+            children: [
+              const Icon(Icons.warning, color: Colors.orange),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  l10n.warning,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
+          ),
+          content: Text(l10n.selectValidCheckpoint),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text(l10n.ok),
+            ),
+          ],
+        ),
+      );
+      return;
+    }
 
     // Check container1 seal1 completion
     if (containerHarbor!.seal1.imagePath == null ||
@@ -131,18 +142,24 @@ class _SealPageState extends State<SealPage> {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Row(
+          title: Row(
             children: [
-              Icon(Icons.warning, color: Colors.orange),
-              SizedBox(width: 8),
-              Text('Incomplete Data'),
+              const Icon(Icons.warning, color: Colors.orange),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  l10n.warning,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
             ],
           ),
-          content: const Text('Please fill in at least Seal 1 for Container 1'),
+          content: Text(l10n.fillSealData),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('OK'),
+              child: Text(l10n.ok),
             ),
           ],
         ),
@@ -154,12 +171,12 @@ class _SealPageState extends State<SealPage> {
       showDialog(
         context: context,
         barrierDismissible: false,
-        builder: (context) => const AlertDialog(
+        builder: (context) => AlertDialog(
           content: Row(
             children: [
               CircularProgressIndicator(),
               SizedBox(width: 16),
-              Text('Sending data...'),
+              Text(l10n.sendingData),
             ],
           ),
         ),
@@ -189,18 +206,24 @@ class _SealPageState extends State<SealPage> {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Row(
+          title: Row(
             children: [
-              Icon(Icons.check_circle, color: Colors.green),
-              SizedBox(width: 8),
-              Text('Success'),
+              const Icon(Icons.check_circle, color: Colors.green),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  l10n.success,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
             ],
           ),
-          content: const Text('Data sent successfully'),
+          content: Text(l10n.dataSent),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('OK'),
+              child: Text(l10n.ok),
             ),
           ],
         ),
@@ -212,18 +235,24 @@ class _SealPageState extends State<SealPage> {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Row(
+          title: Row(
             children: [
               Icon(Icons.error, color: Colors.red),
               SizedBox(width: 8),
-              Text('Error'),
+              Expanded(
+                child: Text(
+                  l10n.error,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
             ],
           ),
-          content: Text('Failed to send data: $e'),
+          content: Text('${l10n.sendFailed}: $e'),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('OK'),
+              child: Text(l10n.ok),
             ),
           ],
         ),
@@ -232,6 +261,7 @@ class _SealPageState extends State<SealPage> {
   }
 
   Future<void> _showCheckPointDialog() async {
+    final l10n = AppLocalizations.of(context)!;
     final selected = await showDialog<CheckPoint?>(
       context: context,
       barrierDismissible: false,
@@ -252,19 +282,23 @@ class _SealPageState extends State<SealPage> {
                     topRight: Radius.circular(16),
                   ),
                 ),
-                child: const Row(
+                child: Row(
                   children: [
                     Icon(
                       Icons.location_on,
                       color: Colors.white,
                     ),
                     SizedBox(width: 8),
-                    Text(
-                      'Select Checkpoint',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
+                    Expanded(
+                      child: Text(
+                        l10n.selectCheckpoint,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                   ],
@@ -316,6 +350,8 @@ class _SealPageState extends State<SealPage> {
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold,
                                         ),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
                                       ),
                                     ),
                                   ],
@@ -328,18 +364,22 @@ class _SealPageState extends State<SealPage> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'Code: ${checkpoint.code}',
+                                        l10n.code(checkpoint.code),
                                         style: TextStyle(
                                           color: Colors.grey[600],
                                         ),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
                                       ),
                                       if (checkpoint.lanename != null) ...[
                                         const SizedBox(height: 2),
                                         Text(
-                                          'Lane: ${checkpoint.lanename}',
+                                          l10n.lane(checkpoint.lanename!),
                                           style: TextStyle(
                                             color: Colors.grey[600],
                                           ),
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
                                         ),
                                       ],
                                     ],
@@ -360,8 +400,20 @@ class _SealPageState extends State<SealPage> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     TextButton(
-                      onPressed: () {
-                        Navigator.pop(context, null);
+                      onPressed: () async {
+                        if (selectedCheckPoint != null) {
+                          Navigator.pop(context, selectedCheckPoint);
+                        } else {
+                          final auth = await AuthService.getAuth();
+                          final unknownCheckpoint = CheckPoint(
+                            id: 0,
+                            compId: auth.compId,
+                            name: l10n.unknown,
+                            code: l10n.unknownCode,
+                            lanename: null,
+                          );
+                          Navigator.pop(context, unknownCheckpoint);
+                        }
                       },
                       style: TextButton.styleFrom(
                         padding: const EdgeInsets.symmetric(
@@ -369,8 +421,8 @@ class _SealPageState extends State<SealPage> {
                           vertical: 12,
                         ),
                       ),
-                      child: const Text(
-                        'Cancel',
+                      child: Text(
+                        l10n.cancel,
                         style: TextStyle(
                           color: Colors.red,
                           fontWeight: FontWeight.bold,
@@ -386,22 +438,22 @@ class _SealPageState extends State<SealPage> {
       },
     );
 
-    if (selected == null) {
-      // User cancelled, navigate back to dashboard
-      if (mounted) {
-        Navigator.of(context)
-            .pushNamedAndRemoveUntil(Routes.main, (route) => false);
-      }
-    } else {
+    if (selected != null) {
       await _onCheckPointSelected(selected);
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Seal Scanner'),
+        title: Text(
+          l10n.sealScanner,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+        ),
         centerTitle: true,
         automaticallyImplyLeading: false,
         actions: [
@@ -434,12 +486,14 @@ class _SealPageState extends State<SealPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      'Checkpoint Information',
+                    Text(
+                      l10n.checkpointInfo,
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                     ),
                     const SizedBox(height: 12),
                     Row(
@@ -457,6 +511,8 @@ class _SealPageState extends State<SealPage> {
                               fontSize: 16,
                               fontWeight: FontWeight.w500,
                             ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
                       ],
@@ -470,9 +526,13 @@ class _SealPageState extends State<SealPage> {
                           size: 20,
                         ),
                         const SizedBox(width: 8),
-                        Text(
-                          'Code: ${selectedCheckPoint!.code}',
-                          style: const TextStyle(fontSize: 14),
+                        Expanded(
+                          child: Text(
+                            l10n.code(selectedCheckPoint!.code),
+                            style: const TextStyle(fontSize: 14),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
                       ],
                     ),
@@ -486,9 +546,13 @@ class _SealPageState extends State<SealPage> {
                             size: 20,
                           ),
                           const SizedBox(width: 8),
-                          Text(
-                            'Lane: ${selectedCheckPoint!.lanename}',
-                            style: const TextStyle(fontSize: 14),
+                          Expanded(
+                            child: Text(
+                              l10n.lane(selectedCheckPoint!.lanename!),
+                              style: const TextStyle(fontSize: 14),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
                         ],
                       ),
@@ -533,11 +597,11 @@ class _SealPageState extends State<SealPage> {
               child: FloatingActionButton.extended(
                 onPressed: _handleSend,
                 backgroundColor: AppTheme.primaryColor,
-                label: const Row(
+                label: Row(
                   children: [
-                    Icon(Icons.send),
-                    SizedBox(width: 8),
-                    Text('Send'),
+                    const Icon(Icons.send),
+                    const SizedBox(width: 8),
+                    Text(l10n.send),
                   ],
                 ),
               ),

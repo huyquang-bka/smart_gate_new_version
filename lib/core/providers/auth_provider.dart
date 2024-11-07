@@ -1,27 +1,30 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:clean_store_app/core/services/auth_service.dart';
+import 'package:flutter/foundation.dart';
+import 'package:smart_gate_new_version/core/services/auth_service.dart';
 
-final authProvider = StateNotifierProvider<AuthNotifier, Auth?>((ref) {
-  return AuthNotifier();
-});
+class AuthProvider extends ChangeNotifier {
+  Auth? _auth;
 
-class AuthNotifier extends StateNotifier<Auth?> {
-  AuthNotifier() : super(null) {
+  Auth? get auth => _auth;
+
+  AuthProvider() {
     checkAuthState();
   }
 
   Future<void> checkAuthState() async {
     final auth = await AuthService.getAuth();
     if (auth.accessToken.isNotEmpty) {
-      state = auth;
+      _auth = auth;
+      notifyListeners();
     }
   }
 
   void setAuth(Auth auth) {
-    state = auth;
+    _auth = auth;
+    notifyListeners();
   }
 
   void clearAuth() {
-    state = null;
+    _auth = null;
+    notifyListeners();
   }
-} 
+}

@@ -1,7 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final themeProvider = StateProvider<ThemeMode>((ref) => ThemeMode.light);
+class AppSettings extends ChangeNotifier {
+  ThemeMode _themeMode = ThemeMode.light;
+  AppLanguage _language = AppLanguage.english;
+
+  ThemeMode get themeMode => _themeMode;
+  AppLanguage get language => _language;
+
+  void setThemeMode(ThemeMode mode) {
+    _themeMode = mode;
+    notifyListeners();
+  }
+
+  void setLanguage(AppLanguage lang) {
+    _language = lang;
+    notifyListeners();
+  }
+}
 
 enum AppLanguage {
   english(Locale('en', 'US'), 'English', '🇺🇸'),
@@ -13,5 +28,3 @@ enum AppLanguage {
 
   const AppLanguage(this.locale, this.name, this.flag);
 }
-
-final languageProvider = StateProvider<AppLanguage>((ref) => AppLanguage.english); 

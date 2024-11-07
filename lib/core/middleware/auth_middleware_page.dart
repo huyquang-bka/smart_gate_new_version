@@ -1,5 +1,6 @@
-import 'package:clean_store_app/core/routes/routes.dart';
-import 'package:clean_store_app/core/services/auth_service.dart';
+import 'package:smart_gate_new_version/core/configs/app_theme.dart';
+import 'package:smart_gate_new_version/core/routes/routes.dart';
+import 'package:smart_gate_new_version/core/services/auth_service.dart';
 import 'package:flutter/material.dart';
 
 class AuthMiddlewarePage extends StatefulWidget {
@@ -13,7 +14,9 @@ class _AuthMiddlewarePageState extends State<AuthMiddlewarePage> {
   @override
   void initState() {
     super.initState();
-    _initializeAndRoute();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _initializeAndRoute();
+    });
   }
 
   Future<void> _initializeAndRoute() async {
@@ -38,6 +41,24 @@ class _AuthMiddlewarePageState extends State<AuthMiddlewarePage> {
 
   @override
   Widget build(BuildContext context) {
-    return const SizedBox();
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.store,
+              size: 80,
+              color: AppTheme.primaryColor,
+            ),
+            const SizedBox(height: 24),
+            CircularProgressIndicator(
+              color: AppTheme.primaryColor,
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

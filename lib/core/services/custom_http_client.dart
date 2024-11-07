@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:clean_store_app/core/configs/api_route.dart';
-import 'package:clean_store_app/core/services/auth_service.dart';
-import 'package:clean_store_app/core/exceptions/session_expired_exception.dart';
+import 'package:smart_gate_new_version/core/configs/api_route.dart';
+import 'package:smart_gate_new_version/core/services/auth_service.dart';
+import 'package:smart_gate_new_version/core/exceptions/session_expired_exception.dart';
 
 class CustomHttpClient {
   Auth? _auth;
@@ -102,7 +102,6 @@ class CustomHttpClient {
 
   Future<int> login(String username, String password) async {
     final url = Uri.parse(Url.auth);
-    print('Login URL: ${url.toString()}');
 
     Map<String, String> payload = Map.from(AuthBody.login(
       username: username,
@@ -110,7 +109,6 @@ class CustomHttpClient {
     ));
 
     try {
-      print('Sending login request...');
       final response = await http.post(
         url,
         body: jsonEncode(payload),
@@ -118,9 +116,6 @@ class CustomHttpClient {
           'Content-Type': 'application/json',
         },
       ).timeout(const Duration(seconds: 5));
-
-      print('Response status: ${response.statusCode}');
-      print('Response body: ${response.body}');
 
       if (response.statusCode == 200) {
         final body = jsonDecode(response.body);

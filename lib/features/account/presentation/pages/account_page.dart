@@ -1,18 +1,47 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:clean_store_app/core/services/auth_service.dart';
-import 'package:clean_store_app/core/routes/routes.dart';
+import 'package:provider/provider.dart';
+import 'package:smart_gate_new_version/core/configs/app_constants.dart';
+import 'package:smart_gate_new_version/core/services/auth_service.dart';
+import 'package:smart_gate_new_version/core/routes/routes.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:smart_gate_new_version/core/providers/language_provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class AccountPage extends ConsumerWidget {
+class AccountPage extends StatelessWidget {
   const AccountPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final languageProvider = context.watch<LanguageProvider>();
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Account'),
+        title: Text(l10n.account),
         centerTitle: true,
         automaticallyImplyLeading: false,
+        actions: [
+          PopupMenuButton<AppLanguage>(
+            icon: Text(languageProvider.currentLanguage.flag),
+            onSelected: (AppLanguage language) async {
+              await languageProvider.setLanguage(language);
+            },
+            itemBuilder: (BuildContext context) {
+              return AppLanguage.values.map((AppLanguage language) {
+                return PopupMenuItem<AppLanguage>(
+                  value: language,
+                  child: Row(
+                    children: [
+                      Text(language.flag),
+                      const SizedBox(width: 8),
+                      Text(language.name),
+                    ],
+                  ),
+                );
+              }).toList();
+            },
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -24,7 +53,7 @@ class AccountPage extends ConsumerWidget {
               }
 
               if (snapshot.hasError) {
-                return const Center(child: Text('Error loading profile'));
+                return Center(child: Text(l10n.errorLoadingAuth));
               }
 
               final auth = snapshot.data!;
@@ -41,22 +70,22 @@ class AccountPage extends ConsumerWidget {
                           ListTile(
                             leading: const Icon(Icons.person),
                             title: Text(auth.fullName),
-                            subtitle: Text('User ID: ${auth.userId}'),
+                            subtitle: Text(auth.fullName),
                           ),
                           const Divider(),
                           ListTile(
                             leading: const Icon(Icons.business),
-                            title: const Text('Company ID'),
+                            title: Text(l10n.companyIdTitle),
                             subtitle: Text('${auth.compId}'),
                           ),
                           ListTile(
                             leading: const Icon(Icons.person_outline),
-                            title: const Text('Username'),
+                            title: Text(l10n.username),
                             subtitle: Text(auth.username),
                           ),
                           ListTile(
                             leading: const Icon(Icons.badge),
-                            title: const Text('Full Name'),
+                            title: Text(l10n.fullName),
                             subtitle: Text(auth.fullName),
                           ),
                         ],
@@ -73,19 +102,18 @@ class AccountPage extends ConsumerWidget {
                         final shouldLogout = await showDialog<bool>(
                           context: context,
                           builder: (context) => AlertDialog(
-                            title: const Text('Logout'),
-                            content:
-                                const Text('Are you sure you want to logout?'),
+                            title: Text(l10n.logout),
+                            content: Text(l10n.logoutConfirm),
                             actions: [
                               TextButton(
                                 onPressed: () => Navigator.pop(context, false),
-                                child: const Text('Cancel'),
+                                child: Text(l10n.cancel),
                               ),
                               TextButton(
                                 onPressed: () => Navigator.pop(context, true),
-                                child: const Text(
-                                  'Logout',
-                                  style: TextStyle(color: Colors.red),
+                                child: Text(
+                                  l10n.logout,
+                                  style: const TextStyle(color: Colors.red),
                                 ),
                               ),
                             ],
@@ -103,11 +131,28 @@ class AccountPage extends ConsumerWidget {
                         }
                       },
                       icon: const Icon(Icons.logout),
-                      label: const Text('Logout'),
+                      label: Text(l10n.logout),
                       style: ElevatedButton.styleFrom(
                         foregroundColor: Colors.white,
                         backgroundColor: Colors.red,
                         padding: const EdgeInsets.symmetric(vertical: 16),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  // Copyright section
+                  GestureDetector(
+                    onTap: () async {
+                      final url = Uri.parse(AppConstants.companyWebsite);
+                      if (await canLaunchUrl(url)) {
+                        await launchUrl(url);
+                      }
+                    },
+                    child: const Text(
+                      AppConstants.copyright,
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 12,
                       ),
                     ),
                   ),
