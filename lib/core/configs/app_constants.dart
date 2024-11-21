@@ -38,4 +38,7 @@ class AppConstants {
   static const String defaultErrorMessage = 'Something went wrong';
   static const String networkErrorMessage = 'Network connection error';
   static const String unauthorizedMessage = 'Unauthorized access';
+
+  //Image additional
+  static const int maxAdditionalImages = 6;
 }

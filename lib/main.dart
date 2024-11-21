@@ -9,16 +9,17 @@ import 'package:smart_gate_new_version/core/routes/routes.dart';
 import 'package:smart_gate_new_version/core/services/mqtt_service.dart';
 import 'package:smart_gate_new_version/features/auth/presentation/pages/login_page.dart';
 import 'package:smart_gate_new_version/features/main/presentation/pages/main_page.dart';
+import 'package:smart_gate_new_version/features/task/providers/task_provider.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  // Initialize MQTT service
   mqttService.connect();
 
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => LanguageProvider()),
+        ChangeNotifierProvider(create: (_) => TaskProvider()),
       ],
       child: const MyApp(),
     ),

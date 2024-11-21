@@ -1,6 +1,7 @@
 class ApiRoute {
   // Base URLs
   static const String baseUrl = "https://crd.atin.vn";
+  // static const String baseUrl = "http://172.34.64.10:42001";
   static const String aiServiceUrl = "http://atin.bkaitech.com:6299";
 }
 

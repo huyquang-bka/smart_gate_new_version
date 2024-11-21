@@ -143,13 +143,27 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
             // Action buttons
             Row(
               children: [
-                IconButton(
-                  onPressed: _isLoading
-                      ? null
-                      : () => _getImageFromSource(ImageSource.camera),
-                  icon: const Icon(Icons.camera_alt),
-                  tooltip: l10n.takePhoto,
-                  color: AppTheme.primaryColor,
+                Container(
+                  decoration: BoxDecoration(
+                    color: AppTheme.primaryColor,
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppTheme.primaryColor.withOpacity(0.3),
+                        blurRadius: 8,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: IconButton(
+                    onPressed: _isLoading
+                        ? null
+                        : () => _getImageFromSource(ImageSource.camera),
+                    icon: const Icon(Icons.camera_alt),
+                    color: Colors.white,
+                    tooltip: l10n.takePhoto,
+                    iconSize: 28,
+                  ),
                 ),
                 IconButton(
                   onPressed: _isLoading

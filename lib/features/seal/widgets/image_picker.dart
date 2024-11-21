@@ -186,9 +186,9 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
     final l10n = AppLocalizations.of(context)!;
 
     return GestureDetector(
+      behavior: HitTestBehavior.translucent,
       onTap: () {
-        _seal1Focus.unfocus();
-        _seal2Focus.unfocus();
+        FocusScope.of(context).unfocus();
       },
       child: Container(
         width: double.infinity,
@@ -255,6 +255,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
                       color: AppTheme.primaryColor,
                       width: 1,
                     ),
+                    color: AppTheme.primaryColor,
                   ),
                   child: IconButton(
                     onPressed: _isLoading
@@ -262,7 +263,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
                         : () => _getImageFromSource(ImageSource.camera),
                     icon: const Icon(Icons.camera_alt),
                     tooltip: l10n.takePhoto,
-                    color: AppTheme.primaryColor,
+                    color: Colors.white,
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -333,7 +334,6 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
               decoration: InputDecoration(
                 labelText: l10n.seal1,
                 border: const OutlineInputBorder(),
-                suffixIcon: const Icon(Icons.qr_code),
               ),
               onChanged: widget.onSeal1NumberChanged,
             ),
@@ -345,7 +345,6 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
               decoration: InputDecoration(
                 labelText: l10n.seal2,
                 border: const OutlineInputBorder(),
-                suffixIcon: const Icon(Icons.qr_code),
               ),
               onChanged: widget.onSeal2NumberChanged,
             ),

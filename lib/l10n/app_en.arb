@@ -232,5 +232,205 @@
   "logout": "Logout",
   "logoutConfirm": "Are you sure you want to logout?",
   "cancel": "Cancel",
-  "loading": "Loading..."
+  "loading": "Loading...",
+
+  "@_ERROR_MESSAGES": {},
+  "connectError": "Connection error. Please try again or restart the app",
+  "networkError": "Network error",
+  "serverError": "Server error",
+  "unknownError": "Unknown error occurred",
+  "timeoutError": "Connection timeout",
+  "sendFailed": "Failed to send data: {error}",
+  "@sendFailed": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+
+  "@_CHECKPOINT_SELECTION": {},
+  "manageCheckpoints": "Manage Checkpoints",
+  "selectCheckpoints": "Select Checkpoints",
+  "noCheckpointsSelected": "No checkpoints selected",
+  "saveCheckpoints": "Save Checkpoints",
+
+  "@_TASK_PAGE": {},
+  "tasks": "Tasks",
+  "noTasks": "No tasks available",
+  "container1Label": "Container 1",
+  "container2Label": "Container 2",
+  "timeLabel": "Time",
+  "checkpointLabel": "Checkpoint",
+  "remove": "Remove",
+  "unknownCheckpoint": "Unknown Checkpoint",
+  "checkpointWithLane": "{name} - Lane {lane}",
+  "@checkpointWithLane": {
+    "placeholders": {
+      "name": {},
+      "lane": {}
+    }
+  },
+  "dateTimeFormat": "{hour}:{minute}:{second} {day}/{month}/{year}",
+  "@dateTimeFormat": {
+    "placeholders": {
+      "hour": {},
+      "minute": {},
+      "second": {},
+      "day": {},
+      "month": {},
+      "year": {}
+    }
+  },
+
+  "@_CHECKPOINT_DIALOG": {},
+  "selectCheckpoint": "Select Checkpoint",
+  "code": "Code: {code}",
+  "@code": {
+    "placeholders": {
+      "code": {}
+    }
+  },
+  "lane": "Lane: {lane}",
+  "@lane": {
+    "placeholders": {
+      "lane": {}
+    }
+  },
+  "ok": "OK",
+  "cancel": "Cancel",
+  "unknown": "Unknown",
+
+  "@_ADDITIONAL_INFO": {},
+  "additionalInformation": "Additional Information",
+  "maxImages": "{current}/{max} Images",
+  "@maxImages": {
+    "placeholders": {
+      "current": {},
+      "max": {}
+    }
+  },
+  "addPhoto": "Add Photo",
+  "viewPhoto": "View Photo",
+  "deletePhoto": "Delete Photo",
+  "description": "Description",
+  "sealScanner": "Seal Scanner",
+  "send": "Send",
+  "sendingData": "Sending data...",
+  "dataSent": "Data sent successfully",
+  "fillSealData": "Please fill in at least Seal 1 for Container 1",
+  "connectError": "Connection error. Please check your connection",
+
+  "@_CONTAINER_EDIT": {},
+  "editContainer1": "Edit Container 1",
+  "editContainer2": "Edit Container 2",
+  "containerCode": "Container Code",
+  "containerInformation": "Container Information",
+  "containerTimeLabel": "Time",
+  "containerCheckpointLabel": "Checkpoint",
+  "containerTimeFormat": "{hour}:{minute}:{second} {day}/{month}/{year}",
+  "@containerTimeFormat": {
+    "placeholders": {
+      "hour": {},
+      "minute": {},
+      "second": {},
+      "day": {},
+      "month": {},
+      "year": {}
+    }
+  },
+
+  "@_CONTAINER_INFO": {},
+  "container1Code": "Container 1: {code}",
+  "@container1Code": {
+    "placeholders": {
+      "code": {}
+    }
+  },
+  "container2Code": "Container 2: {code}",
+  "@container2Code": {
+    "placeholders": {
+      "code": {}
+    }
+  },
+  "checkpointId": "Checkpoint: {id}",
+  "@checkpointId": {
+    "placeholders": {
+      "id": {}
+    }
+  },
+  "time": "Time: {time}",
+  "@time": {
+    "placeholders": {
+      "time": {}
+    }
+  },
+  "containerTimeFormat": "{hour}:{minute}:{second} {day}/{month}/{year}",
+  "@containerTimeFormat": {
+    "placeholders": {
+      "hour": {},
+      "minute": {},
+      "second": {},
+      "day": {},
+      "month": {},
+      "year": {}
+    }
+  },
+  "checkpointWithLane": "{name} ({lane})",
+  "@checkpointWithLane": {
+    "placeholders": {
+      "name": {},
+      "lane": {}
+    }
+  },
+  "unknownCheckpoint": "Unknown Checkpoint",
+  "checkpointWithLane": "{name} - Lane {lane}",
+  "@checkpointWithLane": {
+    "placeholders": {
+      "name": {},
+      "lane": {}
+    }
+  },
+
+  "@_SEAL_TASK": {},
+  "containerInformation": "Container Information",
+  "container1Code": "Container 1: {code}",
+  "@container1Code": {
+    "placeholders": {
+      "code": {}
+    }
+  },
+  "container2Code": "Container 2: {code}",
+  "@container2Code": {
+    "placeholders": {
+      "code": {}
+    }
+  },
+  "editContainer1": "Edit Container 1",
+  "editContainer2": "Edit Container 2",
+  "containerCode": "Container Code",
+  "additionalInformation": "Additional Information",
+  "maxImages": "{current}/{max} Images",
+  "@maxImages": {
+    "placeholders": {
+      "current": {},
+      "max": {}
+    }
+  },
+  "addPhoto": "Add Photo",
+  "viewPhoto": "View Photo",
+  "deletePhoto": "Delete Photo",
+  "description": "Description",
+  "success": "Success",
+  "error": "Error",
+  "warning": "Warning",
+  "ok": "OK",
+  "cancel": "Cancel",
+  "dataSent": "Data sent successfully",
+  "sendingData": "Sending data...",
+  "sendFailed": "Failed to send data: {error}",
+  "@sendFailed": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "connectError": "Connection error. Please check your connection"
 } 

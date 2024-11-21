@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:smart_gate_new_version/core/configs/api_route.dart';
 import 'package:smart_gate_new_version/core/configs/app_constants.dart';
 import 'package:smart_gate_new_version/core/services/auth_service.dart';
 import 'package:smart_gate_new_version/core/routes/routes.dart';
+import 'package:smart_gate_new_version/core/services/custom_http_client.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:smart_gate_new_version/core/providers/language_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'dart:convert';
+import 'package:smart_gate_new_version/core/services/checkpoint_service.dart';
+import 'package:smart_gate_new_version/features/seal/domain/models/check_point.dart';
+import 'package:smart_gate_new_version/core/widgets/checkpoint_selection_dialog.dart';
 
 class AccountPage extends StatelessWidget {
   const AccountPage({super.key});
@@ -21,6 +27,33 @@ class AccountPage extends StatelessWidget {
         centerTitle: true,
         automaticallyImplyLeading: false,
         actions: [
+          IconButton(
+            icon: const Icon(Icons.location_on),
+            onPressed: () async {
+              final response = await customHttpClient.get(Url.getCheckPoint);
+              if (response.statusCode == 200) {
+                final auth = await AuthService.getAuth();
+                final List<dynamic> data = json.decode(response.body)["data"];
+                final allCheckPoints = data
+                    .map((json) => CheckPoint.fromJson(json))
+                    .where((checkpoint) => checkpoint.compId == auth.compId)
+                    .toList();
+
+                if (context.mounted && allCheckPoints.isNotEmpty) {
+                  final selectedIds =
+                      await CheckpointService.getSelectedCheckpointIds();
+                  await showDialog(
+                    context: context,
+                    builder: (context) => CheckpointSelectionDialog(
+                      checkpoints: allCheckPoints,
+                      selectedIds: selectedIds,
+                      isCollapsed: false,
+                    ),
+                  );
+                }
+              }
+            },
+          ),
           PopupMenuButton<AppLanguage>(
             icon: Text(languageProvider.currentLanguage.flag),
             onSelected: (AppLanguage language) async {

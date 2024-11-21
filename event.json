@@ -1,0 +1,91 @@
+{
+  "CheckPointId": 2100,
+  "CompId": 1082,
+  "ContainerCode1": "CSOU410333545G1",
+  "ContainerCode2": "",
+  "EventId": "b2623dd8-22c6-4a7f-9ce8-2a9006505392",
+  "ImgDoor1": "2100/3156/2024-11-19/images/behind_2024_11_19_08_07_37.jpg",
+  "ImgDoor2": null,
+  "ImgFront1": "2100/3157/2024-11-19/images/front_2024_11_19_08_07_34.jpg",
+  "ImgFront2": null,
+  "ImgLeft1": null,
+  "ImgLeft2": null,
+  "ImgRight1": "2100/3153_damage/2024-11-19/images/2024-11-19_08_08_01_container_1.jpg",
+  "ImgRight2": "",
+  "ImgTop1": "2100/3158_damage/2024-11-19/images/2024-11-19_08_07_35_container_1.jpg",
+  "ImgTop2": null,
+  "ImgTractor": "2100/3154/2024-11-19/images/15H07054_2024-11-19_08_07_31.jpg",
+  "ImgTrailer": "2100/3155/2024-11-19/images/15R05961_2024-11-19_08_07_37.jpg",
+  "LaneId": 1024,
+  "LicensePlates": null,
+  "PortLocation": 1,
+  "TimeInOut": "2024-11-19 08:07:37",
+  "TractorLicensePlate": "15H07054",
+  "TrailerLicensePlate": "15R05961",
+  "VidBehind": "2100/3156/2024-11-19/videos/behind_2024_11_19_08_07_37.mp4",
+  "VidFront": "2100/3157/2024-11-19/videos/front_2024_11_19_08_07_34.mp4",
+  "VidLeft": null,
+  "VidRight": "2100/3153/side_2024-11-19/videos/CSOU410333545G1_19_11_2024_08_07_38_1492.mp4",
+  "VidTop": "2100/3158_damage/2024-11-19/videos/2024-11-19_08_07_35.mp4",
+  "VidTractor": "2100/3154/2024-11-19/videos/15H07054_2024-11-19_08_07_31.mp4",
+  "VidTrailer": "2100/3155/2024-11-19/videos/15R05961_2024-11-19_08_07_37.mp4",
+  "listDmg": [
+    {
+      "ContainerIndex": 1,
+      "IdDamageGroupClassification": 1,
+      "IdDamageLocation": 4,
+      "PolygonPoint": "(0.09986582327007859,0.05858421480878763) (0.12440099674142227,0.13588283157038242)",
+      "id": "e038ca09-5e4b-4115-a55a-696a10cdfffe"
+    },
+    {
+      "ContainerIndex": 1,
+      "IdDamageGroupClassification": 1,
+      "IdDamageLocation": 4,
+      "PolygonPoint": "(0.08050603795284646,0.05858421480878763) (0.09507379720145677,0.12855980471928397)",
+      "id": "7c07d202-43bd-4102-82aa-f0a8932e65bf"
+    },
+    {
+      "ContainerIndex": 1,
+      "IdDamageGroupClassification": 1,
+      "IdDamageLocation": 4,
+      "PolygonPoint": "(0.1688709986582327,0.08136696501220504) (0.18478052520605712,0.15378356387306755)",
+      "id": "7c31043d-0fe3-4659-99ca-e32c05de922e"
+    },
+    {
+      "ContainerIndex": 1,
+      "IdDamageGroupClassification": 1,
+      "IdDamageLocation": 4,
+      "PolygonPoint": "(0.1472110408280621,0.07160292921074043) (0.16350392946137626,0.14483319772172498)",
+      "id": "bbc057e4-ef41-430b-995b-a9bf6e02013e"
+    },
+    {
+      "ContainerIndex": 1,
+      "IdDamageGroupClassification": 2,
+      "IdDamageLocation": 4,
+      "PolygonPoint": "(0.0523289246693502,0.3954434499593165) (0.204523672608779,0.5443449959316518)",
+      "id": "f34d1b90-c886-4cc8-b178-9d52f32167c7"
+    },
+    {
+      "IdDamageGroupClassification": 1,
+      "IdDamageLocation": 1,
+      "PolygonPoint": "(0.20958083832335328,0.06159420289855073) (0.2714570858283433,0.11775362318840579)",
+      "ContainerIndex": 1,
+      "id": "0ec705a5-32f6-4464-87ac-2570383724b6"
+    },
+    {
+      "IdDamageGroupClassification": 1,
+      "IdDamageLocation": 1,
+      "PolygonPoint": "(0.49700598802395207,0.28804347826086957) (0.6047904191616766,0.38405797101449274)",
+      "ContainerIndex": 1,
+      "id": "67a3b61b-9466-4a77-af8d-d6e5382959b3"
+    },
+    {
+      "IdDamageGroupClassification": 1,
+      "IdDamageLocation": 1,
+      "PolygonPoint": "(0.4750499001996008,0.18659420289855072) (0.6287425149700598,0.36594202898550726)",
+      "ContainerIndex": 1,
+      "id": "d26b8591-87ba-4c64-8486-9259507a583e"
+    }
+  ],
+  "IsError": false
+}

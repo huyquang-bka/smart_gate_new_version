@@ -1,13 +1,19 @@
+import 'package:smart_gate_new_version/core/configs/api_route.dart';
 import 'package:smart_gate_new_version/core/configs/app_constants.dart';
 import 'package:smart_gate_new_version/core/configs/app_theme.dart';
+import 'package:smart_gate_new_version/core/services/auth_service.dart';
+import 'package:smart_gate_new_version/core/services/checkpoint_service.dart';
 import 'package:smart_gate_new_version/core/services/storage_service.dart';
 import 'package:flutter/material.dart';
+import 'package:smart_gate_new_version/core/widgets/checkpoint_selection_dialog.dart';
+import 'package:smart_gate_new_version/features/seal/domain/models/check_point.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:smart_gate_new_version/core/services/custom_http_client.dart';
 import 'package:smart_gate_new_version/core/routes/routes.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:smart_gate_new_version/core/providers/language_provider.dart';
 import 'package:provider/provider.dart';
+import 'dart:convert';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -61,18 +67,15 @@ class _LoginPageState extends State<LoginPage> {
         ),
       );
 
-      // Save credentials before login attempt if remember me is checked
+      // Save credentials if remember me is checked
       if (_rememberMe) {
         await StorageService.saveLoginCredentials(
           username: _usernameController.text,
           password: _passwordController.text,
           rememberMe: true,
         );
-        print(
-            'Saved credentials - Username: ${_usernameController.text}'); // Debug print
       } else {
         await StorageService.clearLoginCredentials();
-        print('Cleared credentials'); // Debug print
       }
 
       final statusCode = await customHttpClient.login(
@@ -84,19 +87,72 @@ class _LoginPageState extends State<LoginPage> {
       Navigator.pop(context); // Remove loading indicator
 
       if (statusCode == 200) {
-        if (mounted) {
-          Navigator.of(context).pushReplacementNamed(Routes.main);
+        // Navigate to main page first
+        if (!mounted) return;
+        Navigator.of(context).pushReplacementNamed(Routes.main);
+
+        // Load checkpoints after navigation
+        try {
+          final response = await customHttpClient.get(Url.getCheckPoint);
+          if (response.statusCode == 200) {
+            final auth = await AuthService.getAuth();
+            final List<dynamic> data = json.decode(response.body)["data"];
+            final allCheckPoints = data
+                .map((json) => CheckPoint.fromJson(json))
+                .where((checkpoint) => checkpoint.compId == auth.compId)
+                .toList();
+
+            if (!mounted) return;
+
+            // Show checkpoint selection dialog
+            if (allCheckPoints.isNotEmpty) {
+              final selectedIds =
+                  await CheckpointService.getSelectedCheckpointIds();
+              await showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (context) => CheckpointSelectionDialog(
+                  checkpoints: allCheckPoints,
+                  selectedIds: selectedIds,
+                ),
+              );
+            }
+          } else {
+            throw Exception('Failed to load checkpoints');
+          }
+        } catch (e) {
+          if (mounted) {
+            showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                title: Row(
+                  children: [
+                    const Icon(Icons.error, color: Colors.red),
+                    const SizedBox(width: 8),
+                    Text(l10n.error),
+                  ],
+                ),
+                content: Text(l10n.errorLoadingCheckpoints(e.toString())),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: Text(l10n.ok),
+                  ),
+                ],
+              ),
+            );
+          }
         }
       } else {
         if (!mounted) return;
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            title: const Row(
+            title: Row(
               children: [
-                Icon(Icons.error, color: Colors.red),
-                SizedBox(width: 8),
-                Text('Login Failed'),
+                const Icon(Icons.error, color: Colors.red),
+                const SizedBox(width: 8),
+                Text(l10n.error),
               ],
             ),
             content: Text(l10n.loginFailed),
@@ -112,7 +168,6 @@ class _LoginPageState extends State<LoginPage> {
     } catch (e) {
       if (mounted) {
         Navigator.pop(context); // Remove loading indicator
-        final l10n = AppLocalizations.of(context)!;
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
@@ -120,7 +175,7 @@ class _LoginPageState extends State<LoginPage> {
               children: [
                 const Icon(Icons.error, color: Colors.red),
                 const SizedBox(width: 8),
-                Text(l10n.networkError),
+                Text(l10n.error),
               ],
             ),
             content: Text(l10n.networkError),
@@ -133,7 +188,6 @@ class _LoginPageState extends State<LoginPage> {
           ),
         );
       }
-      print('Login error: $e'); // Debug print
     }
   }
 

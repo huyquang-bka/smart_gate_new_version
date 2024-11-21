@@ -5,7 +5,9 @@ import 'dart:convert';
 import 'dart:async';
 
 class MqttService {
+  // static const String _broker = '172.34.64.10';
   static const String _broker = '27.72.98.49';
+  static const String _topicEvent = "Test/Container";
   static const int _port = 58883;
   static const String _username = 'admin';
   static const String _password = 'admin';
@@ -59,6 +61,7 @@ class MqttService {
   void _onConnected() {
     print('Connected');
     _isConnected = true;
+    client.subscribe(_topicEvent, MqttQos.atLeastOnce);
     _stopReconnectTimer();
   }
 

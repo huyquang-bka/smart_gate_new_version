@@ -2,40 +2,23 @@ import 'package:smart_gate_new_version/core/configs/app_theme.dart';
 import 'package:smart_gate_new_version/features/seal/domain/models/seal.dart';
 import 'package:smart_gate_new_version/features/seal/widgets/image_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SealContainerPicker extends StatelessWidget {
   final int index;
+  final String containerCode;
   final Seal seal;
   final Function(Seal) onSealChanged;
 
   const SealContainerPicker({
     super.key,
     required this.index,
+    required this.containerCode,
     required this.seal,
     required this.onSealChanged,
   });
 
-  void _updateSeal({
-    String? imagePath,
-    String? sealNumber1,
-    String? sealNumber2,
-    bool? isDangerous,
-  }) {
-    onSealChanged(
-      seal.copyWith(
-        imagePath: imagePath,
-        sealNumber1: sealNumber1,
-        sealNumber2: sealNumber2,
-        isDangerous: isDangerous,
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-
     return Column(
       children: [
         Container(
@@ -48,13 +31,18 @@ class SealContainerPicker extends StatelessWidget {
             color: AppTheme.primaryColor,
             borderRadius: BorderRadius.circular(20),
           ),
-          child: Text(
-            l10n.container(index),
-            style: const TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
-            ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                containerCode,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 16,
+                ),
+              ),
+            ],
           ),
         ),
         const SizedBox(height: 16),
@@ -64,10 +52,18 @@ class SealContainerPicker extends StatelessWidget {
           seal1Number: seal.sealNumber1,
           seal2Number: seal.sealNumber2,
           isDangerous: seal.isDangerous,
-          onImageChanged: (path) => _updateSeal(imagePath: path),
-          onSeal1NumberChanged: (number) => _updateSeal(sealNumber1: number),
-          onSeal2NumberChanged: (number) => _updateSeal(sealNumber2: number),
-          onDangerousChanged: (value) => _updateSeal(isDangerous: value),
+          onImageChanged: (path) => onSealChanged(
+            seal.copyWith(imagePath: path),
+          ),
+          onSeal1NumberChanged: (number) => onSealChanged(
+            seal.copyWith(sealNumber1: number),
+          ),
+          onSeal2NumberChanged: (number) => onSealChanged(
+            seal.copyWith(sealNumber2: number),
+          ),
+          onDangerousChanged: (value) => onSealChanged(
+            seal.copyWith(isDangerous: value),
+          ),
         ),
       ],
     );
