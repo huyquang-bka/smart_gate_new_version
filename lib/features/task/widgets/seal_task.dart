@@ -2,16 +2,13 @@ import 'package:smart_gate_new_version/core/configs/app_constants.dart';
 import 'package:smart_gate_new_version/core/configs/app_theme.dart';
 import 'package:smart_gate_new_version/core/services/auth_service.dart';
 import 'package:smart_gate_new_version/core/services/mqtt_service.dart';
-import 'package:smart_gate_new_version/features/seal/domain/models/check_point.dart';
 import 'package:smart_gate_new_version/features/seal/domain/models/container_harbor.dart';
 import 'package:smart_gate_new_version/features/seal/widgets/seal_container_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:smart_gate_new_version/features/task/domain/models/task.dart';
-import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-import 'package:smart_gate_new_version/core/services/checkpoint_service.dart';
 
 class SealTask extends StatefulWidget {
   const SealTask({
@@ -37,7 +34,6 @@ class _SealTaskState extends State<SealTask> {
   late PageController _pageController;
   final ImagePicker _picker = ImagePicker();
   List<XFile> additionalImages = [];
-  List<CheckPoint> _checkpoints = [];
   final FocusNode _container1FocusNode = FocusNode();
   final FocusNode _container2FocusNode = FocusNode();
   final FocusNode _descriptionFocusNode = FocusNode();
@@ -52,7 +48,6 @@ class _SealTaskState extends State<SealTask> {
     _descriptionController = TextEditingController();
     _pageController = PageController();
     _initializeContainerHarbor();
-    _loadCheckpoints();
   }
 
   @override
@@ -133,7 +128,7 @@ class _SealTaskState extends State<SealTask> {
     final focusNode =
         isFirstContainer ? _container1FocusNode : _container2FocusNode;
 
-    await showDialog(
+    String? result = await showDialog<String>(
       context: context,
       builder: (context) => AlertDialog(
         title:
@@ -145,6 +140,9 @@ class _SealTaskState extends State<SealTask> {
             labelText: l10n.containerCode,
             border: const OutlineInputBorder(),
           ),
+          onSubmitted: (value) {
+            Navigator.pop(context, value);
+          },
         ),
         actions: [
           TextButton(
@@ -157,14 +155,23 @@ class _SealTaskState extends State<SealTask> {
           TextButton(
             onPressed: () {
               focusNode.unfocus();
-              setState(() {});
-              Navigator.pop(context);
+              Navigator.pop(context, controller.text);
             },
             child: Text(l10n.ok),
           ),
         ],
       ),
     );
+
+    if (result != null) {
+      setState(() {
+        if (isFirstContainer) {
+          _container1Controller.text = result;
+        } else {
+          _container2Controller.text = result;
+        }
+      });
+    }
   }
 
   Future<void> _handleSend() async {
@@ -263,8 +270,9 @@ class _SealTaskState extends State<SealTask> {
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.pop(context);
                 widget.onTaskFinish();
+                Navigator.pop(context); // Close success dialog
+                Navigator.pop(context); // Back to task page
               },
               style: AppTheme.actionButtonStyle,
               child: Padding(
@@ -311,146 +319,6 @@ class _SealTaskState extends State<SealTask> {
         ),
       );
     }
-  }
-
-  Future<void> _loadCheckpoints() async {
-    final checkpoints = await CheckpointService.getAllCheckpoints();
-    setState(() {
-      _checkpoints = checkpoints;
-    });
-  }
-
-  String _getCheckpointDisplay(String checkpointId) {
-    final l10n = AppLocalizations.of(context)!;
-    final checkpoint = _checkpoints.firstWhere(
-      (cp) => cp.id.toString() == checkpointId,
-      orElse: () => CheckPoint(
-        id: -1,
-        name: l10n.unknownCheckpoint,
-        code: '',
-        compId: -1,
-      ),
-    );
-
-    return checkpoint.lanename != null && checkpoint.lanename!.isNotEmpty
-        ? l10n.checkpointWithLane(checkpoint.name, checkpoint.lanename!)
-        : checkpoint.name;
-  }
-
-  Widget _buildTaskInfo() {
-    final l10n = AppLocalizations.of(context)!;
-    return Container(
-      margin: const EdgeInsets.all(16),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              const Icon(
-                Icons.local_shipping,
-                color: AppTheme.primaryColor,
-                size: 24,
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Text(
-                  l10n.containerInformation,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: AppTheme.primaryColor,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          Row(
-            children: [
-              const Icon(Icons.inventory_2, size: 20),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Text(
-                  l10n.container1Code(_container1Controller.text),
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-              IconButton(
-                icon: const Icon(Icons.edit, size: 20),
-                onPressed: () => _editContainerCode(context, true),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Row(
-            children: [
-              const Icon(Icons.inventory_2, size: 20),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Text(
-                  l10n.container2Code(_container2Controller.text),
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-              IconButton(
-                icon: const Icon(Icons.edit, size: 20),
-                onPressed: () => _editContainerCode(context, false),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Row(
-            children: [
-              const Icon(Icons.location_on, size: 20),
-              const SizedBox(width: 8),
-              Text(
-                '${l10n.checkpointLabel}: ',
-                style: const TextStyle(fontSize: 14),
-              ),
-              Expanded(
-                child: Text(
-                  _getCheckpointDisplay(widget.task.checkPointId.toString()),
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Row(
-            children: [
-              const Icon(Icons.access_time, size: 20),
-              const SizedBox(width: 8),
-              Text(
-                l10n.time(DateFormat('HH:mm:ss dd-MM-yyyy')
-                    .format(widget.task.timeInOut.toLocal())),
-                style: const TextStyle(fontSize: 14),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
   }
 
   Widget _buildAdditionalInfo() {
@@ -594,15 +462,21 @@ class _SealTaskState extends State<SealTask> {
             overflow: TextOverflow.ellipsis,
           ),
           centerTitle: true,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.send),
+              onPressed: _handleSend,
+            ),
+          ],
         ),
         body: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildTaskInfo(),
               if (containerHarbor != null) ...[
-                SizedBox(
-                  height: 500,
+                Container(
+                  margin: const EdgeInsets.only(top: 16),
+                  height: MediaQuery.of(context).size.height * 0.5,
                   child: PageView(
                     controller: _pageController,
                     children: [
@@ -618,6 +492,8 @@ class _SealTaskState extends State<SealTask> {
                             );
                           });
                         },
+                        onEditContainer: () =>
+                            _editContainerCode(context, true),
                       ),
                       SealContainerPicker(
                         key: const ValueKey('container2'),
@@ -631,32 +507,17 @@ class _SealTaskState extends State<SealTask> {
                             );
                           });
                         },
+                        onEditContainer: () =>
+                            _editContainerCode(context, false),
                       ),
                     ],
                   ),
                 ),
               ],
               _buildAdditionalInfo(),
-              const SizedBox(height: 100),
             ],
           ),
         ),
-        floatingActionButton: Container(
-          padding: const EdgeInsets.all(16),
-          width: double.infinity,
-          child: FloatingActionButton.extended(
-            onPressed: _handleSend,
-            backgroundColor: AppTheme.primaryColor,
-            label: Row(
-              children: [
-                const Icon(Icons.send),
-                const SizedBox(width: 8),
-                Text(l10n.send),
-              ],
-            ),
-          ),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       ),
     );
   }

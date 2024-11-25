@@ -69,7 +69,7 @@ class _TaskPageState extends State<TaskPage> {
                   child: Column(
                     children: sortedTasks.map((task) {
                       return Padding(
-                        padding: const EdgeInsets.all(16),
+                        padding: const EdgeInsets.all(8),
                         child: GestureDetector(
                           onTap: () {
                             Navigator.of(context).push(
@@ -90,7 +90,7 @@ class _TaskPageState extends State<TaskPage> {
                               color: Colors.white,
                             ),
                             child: Padding(
-                              padding: const EdgeInsets.all(16),
+                              padding: const EdgeInsets.all(8),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [

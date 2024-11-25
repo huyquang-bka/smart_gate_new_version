@@ -1,4 +1,3 @@
-import 'package:smart_gate_new_version/core/configs/app_theme.dart';
 import 'package:smart_gate_new_version/features/seal/domain/models/seal.dart';
 import 'package:smart_gate_new_version/features/seal/widgets/image_picker.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +7,7 @@ class SealContainerPicker extends StatelessWidget {
   final String containerCode;
   final Seal seal;
   final Function(Seal) onSealChanged;
+  final Function() onEditContainer;
 
   const SealContainerPicker({
     super.key,
@@ -15,6 +15,7 @@ class SealContainerPicker extends StatelessWidget {
     required this.containerCode,
     required this.seal,
     required this.onSealChanged,
+    required this.onEditContainer,
   });
 
   @override
@@ -23,29 +24,35 @@ class SealContainerPicker extends StatelessWidget {
       children: [
         Container(
           margin: const EdgeInsets.symmetric(horizontal: 16),
-          padding: const EdgeInsets.symmetric(
-            horizontal: 16,
-            vertical: 8,
-          ),
           decoration: BoxDecoration(
-            color: AppTheme.primaryColor,
-            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: Colors.black),
+            borderRadius: BorderRadius.circular(10),
+            color: Colors.grey.withOpacity(0.5),
           ),
           child: Row(
-            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                containerCode,
+                containerCode.toUpperCase(),
                 style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w500,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
                   fontSize: 16,
                 ),
+              ),
+              IconButton(
+                onPressed: onEditContainer,
+                icon: const Icon(
+                  Icons.edit,
+                  color: Colors.black,
+                  size: 20,
+                ),
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints(),
               ),
             ],
           ),
         ),
-        const SizedBox(height: 16),
         ImagePickerWidget(
           index: index,
           imagePath: seal.imagePath,
