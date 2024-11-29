@@ -13,6 +13,7 @@ class UriPath {
 
   // POST endpoints
   static const String postSeal = "/api/v1/recognize/seal";
+  static const String saveFile = "/Service/api/File";
 
   // Auth endpoint
   static const String auth = "/Service/api/token/auth";
@@ -55,6 +56,7 @@ class Url {
 
   // POST endpoints
   static const String postSeal = "${ApiRoute.aiServiceUrl}${UriPath.postSeal}";
+  static const String saveFile = "${ApiRoute.baseUrl}${UriPath.saveFile}";
 
   // File Service
   static const String fileService = "${ApiRoute.baseUrl}/Service/files";

@@ -6,21 +6,28 @@ class ContainerHarbor {
   final String fullName;
   final Seal seal1;
   final Seal seal2;
+  String description;
+  List<String> additionalImages;
 
   ContainerHarbor({
     required this.checkPointId,
     required this.userID,
     required this.fullName,
+    this.description = '',
+    List<String>? additionalImages,
   })  : seal1 = Seal(),
-        seal2 = Seal();
+        seal2 = Seal(),
+        additionalImages = additionalImages ?? [];
 
   Map<String, dynamic> toJson() {
     return {
-      "CheckPointId": checkPointId,
-      "userID": userID,
-      "fullName": fullName,
-      "seal1": seal1.toJson(),
-      "seal2": seal2.toJson(),
+      "CheckPointId": int.parse(checkPointId),
+      "USERID": int.parse(userID),
+      "FULLNAME": fullName,
+      "SEAL1": seal1.toJson(),
+      "SEAL2": seal2.toJson(),
+      "DESCRIPTION": description,
+      "ADDITIONIMAGES": additionalImages,
     };
   }
 
@@ -30,11 +37,15 @@ class ContainerHarbor {
     String? fullName,
     Seal? seal1,
     Seal? seal2,
+    String? description,
+    List<String>? additionalImages,
   }) {
     return ContainerHarbor(
       checkPointId: checkPointId ?? this.checkPointId,
       userID: userID ?? this.userID,
       fullName: fullName ?? this.fullName,
+      description: description ?? this.description,
+      additionalImages: additionalImages ?? this.additionalImages,
     )
       ..seal1.imagePath = seal1?.imagePath ?? this.seal1.imagePath
       ..seal1.sealNumber1 = seal1?.sealNumber1 ?? this.seal1.sealNumber1

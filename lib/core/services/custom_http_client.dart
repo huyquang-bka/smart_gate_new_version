@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:smart_gate_new_version/core/configs/api_route.dart';
 import 'package:smart_gate_new_version/core/services/auth_service.dart';
 import 'package:smart_gate_new_version/core/exceptions/session_expired_exception.dart';
+import 'dart:async';
 
 class CustomHttpClient {
   Auth? _auth;
@@ -40,6 +41,53 @@ class CustomHttpClient {
       }
       throw SessionExpiredException();
     }
+    return response;
+  }
+
+  Future<http.MultipartRequest> multipartRequest(String method, Uri url) async {
+    await _initialization;
+    final request = http.MultipartRequest(method, url);
+    request.headers['Authorization'] = 'Bearer ${_auth?.accessToken ?? ''}';
+    return request;
+  }
+
+  Future<http.StreamedResponse> sendMultipartRequest(
+    http.MultipartRequest request,
+  ) async {
+    final response = await request.send().timeout(
+      const Duration(seconds: _timeoutDuration),
+      onTimeout: () {
+        throw TimeoutException(
+          'Request timed out',
+          const Duration(seconds: _timeoutDuration),
+        );
+      },
+    );
+
+    if (response.statusCode == 401 || response.statusCode == 500) {
+      final refreshSuccess = await _refreshToken();
+      if (refreshSuccess) {
+        final newRequest = http.MultipartRequest(
+          request.method,
+          request.url,
+        )..headers['Authorization'] = 'Bearer ${_auth?.accessToken ?? ''}';
+
+        newRequest.fields.addAll(request.fields);
+        newRequest.files.addAll(request.files);
+
+        return newRequest.send().timeout(
+          const Duration(seconds: _timeoutDuration),
+          onTimeout: () {
+            throw TimeoutException(
+              'Request timed out',
+              const Duration(seconds: _timeoutDuration),
+            );
+          },
+        );
+      }
+      throw SessionExpiredException();
+    }
+
     return response;
   }
 
