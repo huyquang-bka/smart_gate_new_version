@@ -41,7 +41,7 @@ class _AuthMiddlewarePageState extends State<AuthMiddlewarePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       backgroundColor: Colors.white,
       body: Center(
         child: Column(
@@ -52,7 +52,7 @@ class _AuthMiddlewarePageState extends State<AuthMiddlewarePage> {
               size: 80,
               color: AppTheme.primaryColor,
             ),
-            const SizedBox(height: 24),
+            SizedBox(height: 24),
             CircularProgressIndicator(
               color: AppTheme.primaryColor,
             ),

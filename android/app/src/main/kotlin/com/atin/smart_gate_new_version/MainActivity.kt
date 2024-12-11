@@ -1,4 +1,4 @@
-package com.example.smart_gate_new_version
+package com.atin.smart_gate_new_version
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -297,7 +297,6 @@ class _SealTaskState extends State<SealTask> {
 
   Future<void> _sendDataViaMqtt() async {
     final jsonData = containerHarbor!.toJson();
-    print('jsonData: $jsonData');
     await mqttService.sendMessage(_baseTopic, jsonData);
   }
 

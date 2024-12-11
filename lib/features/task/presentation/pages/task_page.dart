@@ -24,7 +24,7 @@ class _TaskPageState extends State<TaskPage> {
   }
 
   Future<void> _loadCheckpoints() async {
-    final checkpoints = await CheckpointService.getAllCheckpoints();
+    final checkpoints = await CheckpointService.getSelectedCheckpoints();
     setState(() {
       _checkpoints = checkpoints;
     });
@@ -53,7 +53,10 @@ class _TaskPageState extends State<TaskPage> {
 
     return Consumer<TaskProvider>(
       builder: (context, provider, child) {
-        final tasks = provider.tasks;
+        final tasks = provider.tasks
+            .where(
+                (task) => _checkpoints.any((cp) => cp.id == task.checkPointId))
+            .toList();
         final sortedTasks = List<Task>.from(tasks)
           ..sort((a, b) => a.timeInOut.compareTo(b.timeInOut));
 

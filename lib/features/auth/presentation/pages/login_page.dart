@@ -87,11 +87,7 @@ class _LoginPageState extends State<LoginPage> {
       Navigator.pop(context); // Remove loading indicator
 
       if (statusCode == 200) {
-        // Navigate to main page first
-        if (!mounted) return;
-        Navigator.of(context).pushReplacementNamed(Routes.main);
-
-        // Load checkpoints after navigation
+        // Load checkpoints before navigation
         try {
           final response = await customHttpClient.get(Url.getCheckPoint);
           if (response.statusCode == 200) {
@@ -117,6 +113,10 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               );
             }
+
+            // Navigate to main page after checkpoint selection
+            if (!mounted) return;
+            Navigator.of(context).pushReplacementNamed(Routes.main);
           } else {
             throw Exception('Failed to load checkpoints');
           }

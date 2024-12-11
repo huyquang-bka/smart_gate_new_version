@@ -28,7 +28,8 @@ class _CheckpointSelectionDialogState extends State<CheckpointSelectionDialog> {
   @override
   void initState() {
     super.initState();
-    _selectedIds = List.from(widget.selectedIds);
+    _selectedIds = List.from(widget.selectedIds.where((id) => widget.checkpoints
+        .any((checkpoint) => checkpoint.id.toString() == id)));
     _groupExpanded = {};
     _saveAllCheckpoints();
   }
@@ -65,6 +66,10 @@ class _CheckpointSelectionDialogState extends State<CheckpointSelectionDialog> {
         }
       }
     });
+  }
+
+  Future<void> _saveSelectedCheckpoints() async {
+    await CheckpointService.saveSelectedCheckpointIds(_selectedIds);
   }
 
   @override
@@ -262,7 +267,7 @@ class _CheckpointSelectionDialogState extends State<CheckpointSelectionDialog> {
                 const SizedBox(width: 8),
                 ElevatedButton(
                   onPressed: () async {
-                    await CheckpointService.saveSelectedCheckpointIds(_selectedIds);
+                    await _saveSelectedCheckpoints();
                     if (context.mounted) {
                       Navigator.pop(context, _selectedIds);
                     }

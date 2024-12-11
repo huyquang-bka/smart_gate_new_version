@@ -12,8 +12,6 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   cupertino_icons: ^1.0.2
-  # State management
-  flutter_riverpod: ^2.4.9
   # Navigation
   curved_navigation_bar: ^1.0.6
   # Dependency injection
@@ -52,3 +50,4 @@ flutter_launcher_icons:
   android: true
   ios: true
   image_path: "lib/assets/icons/logo/CHP_logo.jpg"
+

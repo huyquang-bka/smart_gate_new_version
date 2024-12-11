@@ -9,21 +9,38 @@ import 'package:smart_gate_new_version/features/task/domain/models/task.dart';
 class TaskProvider extends ChangeNotifier {
   final List<Task> _tasks = [];
   StreamSubscription<List<MqttReceivedMessage<MqttMessage>>>? _mqttSubscription;
+  StreamSubscription<bool>? _connectionSubscription;
   bool _isInitialized = false;
 
   List<Task> get tasks => _tasks;
 
   TaskProvider() {
+    _setupMqttConnection();
+  }
+
+  void _setupMqttConnection() {
+    _connectionSubscription =
+        mqttService.connectionStream.listen((isConnected) {
+      debugPrint(
+          'MQTT Connection Status: ${isConnected ? 'Connected' : 'Disconnected'}');
+      if (isConnected) {
+        _initializeMqtt();
+      } else {
+        _isInitialized = false;
+        _mqttSubscription?.cancel();
+      }
+    });
+
     _initializeMqtt();
   }
 
   Future<void> _initializeMqtt() async {
     if (_isInitialized) return;
-    
-    try {
-      final selectedCheckpointIds = await CheckpointService.getSelectedCheckpointIds();
 
-      // Cancel existing subscription if any
+    try {
+      final selectedCheckpointIds =
+          await CheckpointService.getSelectedCheckpointIds();
+
       await _mqttSubscription?.cancel();
 
       _mqttSubscription = mqttService.client.updates?.listen(
@@ -38,7 +55,8 @@ class TaskProvider extends ChangeNotifier {
                   data['ContainerCode2'] != null) {
                 try {
                   final task = Task.fromJson(data);
-                  if (selectedCheckpointIds.contains(task.checkPointId.toString()) &&
+                  if (selectedCheckpointIds
+                          .contains(task.checkPointId.toString()) &&
                       !_tasks.any((t) => t.eventId == task.eventId)) {
                     _tasks.insert(0, task);
                     notifyListeners();
@@ -57,6 +75,7 @@ class TaskProvider extends ChangeNotifier {
       _isInitialized = true;
     } catch (e) {
       debugPrint('Error initializing MQTT in provider: $e');
+      _isInitialized = false;
     }
   }
 
@@ -76,6 +95,7 @@ class TaskProvider extends ChangeNotifier {
   @override
   void dispose() {
     _mqttSubscription?.cancel();
+    _connectionSubscription?.cancel();
     super.dispose();
   }
-} 
+}
