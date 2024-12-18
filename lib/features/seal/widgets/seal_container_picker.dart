@@ -20,8 +20,10 @@ class SealContainerPicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Seal currentSeal = seal;
     return Column(
       children: [
+        // Container code
         Container(
           margin: const EdgeInsets.symmetric(horizontal: 16),
           decoration: BoxDecoration(
@@ -53,24 +55,29 @@ class SealContainerPicker extends StatelessWidget {
             ],
           ),
         ),
+        // Seal image
         ImagePickerWidget(
           index: index,
           imagePath: seal.imagePath,
           seal1Number: seal.sealNumber1,
           seal2Number: seal.sealNumber2,
-          isDangerous: seal.isDangerous,
-          onImageChanged: (path) => onSealChanged(
-            seal.copyWith(imagePath: path),
-          ),
-          onSeal1NumberChanged: (number) => onSealChanged(
-            seal.copyWith(sealNumber1: number),
-          ),
-          onSeal2NumberChanged: (number) => onSealChanged(
-            seal.copyWith(sealNumber2: number),
-          ),
-          onDangerousChanged: (value) => onSealChanged(
-            seal.copyWith(isDangerous: value),
-          ),
+          cargoType: seal.cargoType,
+          onImageChanged: (path) {
+            currentSeal.imagePath = path;
+            onSealChanged(currentSeal);
+          },
+          onSeal1NumberChanged: (number) {
+            currentSeal.sealNumber1 = number;
+            onSealChanged(currentSeal);
+          },
+          onSeal2NumberChanged: (number) {
+            currentSeal.sealNumber2 = number;
+            onSealChanged(currentSeal);
+          },
+          onCargoTypeChanged: (cargoType) {
+            currentSeal.cargoType = cargoType;
+            onSealChanged(currentSeal);
+          },
         ),
       ],
     );

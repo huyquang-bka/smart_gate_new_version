@@ -3,17 +3,11 @@ import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 import 'dart:convert';
 import 'dart:async';
+import 'package:smart_gate_new_version/core/configs/app_constants.dart';
 
 typedef MqttConnectionCallback = void Function(bool isConnected);
 
 class MqttService {
-  // static const String _broker = '172.34.64.10';
-  static const String _broker = '27.72.98.49';
-  static const String _topicEvent = "Test/Container";
-  static const int _port = 58883;
-  static const String _username = 'admin';
-  static const String _password = 'admin';
-
   late MqttServerClient client;
   Timer? _reconnectTimer;
   bool _isConnected = false;
@@ -28,8 +22,8 @@ class MqttService {
 
   void _initializeClient() {
     final clientId = DateTime.now().millisecondsSinceEpoch.toString();
-    client = MqttServerClient(_broker, clientId);
-    client.port = _port;
+    client = MqttServerClient(AppConstants.mqttBroker, clientId);
+    client.port = AppConstants.mqttPort;
     client.keepAlivePeriod = 30;
     client.onConnected = _onConnected;
     client.onDisconnected = _onDisconnected;
@@ -49,7 +43,8 @@ class MqttService {
     client.connectionMessage = connMessage;
 
     try {
-      await client.connect(_username, _password);
+      await client.connect(
+          AppConstants.mqttUsername, AppConstants.mqttPassword);
     } on Exception catch (e) {
       print('EXCEPTION: $e');
       client.disconnect();
@@ -57,12 +52,13 @@ class MqttService {
     }
 
     if (client.connectionStatus!.state == MqttConnectionState.connected) {
-      debugPrint('Connected to $_broker:$_port as ${client.clientIdentifier}');
+      debugPrint(
+          'Connected to ${AppConstants.mqttBroker}:${AppConstants.mqttPort} as ${client.clientIdentifier}');
       _isConnected = true;
       _stopReconnectTimer();
     } else {
       print(
-          'Connection failed - disconnecting client ${client.clientIdentifier} from broker $_broker on port $_port');
+          'Connection failed - disconnecting client ${client.clientIdentifier} from broker ${AppConstants.mqttBroker} on port ${AppConstants.mqttPort}');
       client.disconnect();
       _startReconnectTimer();
     }
@@ -72,7 +68,8 @@ class MqttService {
     print('Connected');
     _isConnected = true;
     _connectionController.add(true);
-    client.subscribe(_topicEvent, MqttQos.atLeastOnce);
+    client.subscribe(AppConstants.mqttTopicEvent, MqttQos.atLeastOnce);
+    client.subscribe(AppConstants.mqttTopicCargoType, MqttQos.atLeastOnce);
     _stopReconnectTimer();
   }
 
@@ -111,7 +108,7 @@ class MqttService {
 
     final builder = MqttClientPayloadBuilder();
     builder.addString(messageEncode);
-    await client.publishMessage(topic, MqttQos.atLeastOnce, builder.payload!);
+    client.publishMessage(topic, MqttQos.atLeastOnce, builder.payload!);
   }
 
   void disconnect() {

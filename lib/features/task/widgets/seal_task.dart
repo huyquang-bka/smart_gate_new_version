@@ -201,11 +201,10 @@ class _SealTaskState extends State<SealTask> {
   Future<void> _handleSend() async {
     final l10n = AppLocalizations.of(context)!;
     if (containerHarbor == null) return;
-
     _container1FocusNode.unfocus();
     _container2FocusNode.unfocus();
     _descriptionFocusNode.unfocus();
-
+    print("-----------Container Harbor: ${containerHarbor!}");
     if (!_validateSealData(l10n)) return;
 
     try {
@@ -258,7 +257,6 @@ class _SealTaskState extends State<SealTask> {
       if (seal1ImagePath != null) {
         setState(() {
           containerHarbor!.seal1.savedImagePath = seal1ImagePath;
-          print('containerHarbor: ${containerHarbor!.seal1.toJson()}');
         });
       }
     }
@@ -290,9 +288,7 @@ class _SealTaskState extends State<SealTask> {
   void _updateContainerHarborData() {
     if (containerHarbor == null) return;
 
-    setState(() {
-      containerHarbor!.description = _descriptionController.text;
-    });
+    containerHarbor!.description = _descriptionController.text;
   }
 
   Future<void> _sendDataViaMqtt() async {
@@ -553,12 +549,12 @@ class _SealTaskState extends State<SealTask> {
                         key: const ValueKey('container1'),
                         index: 1,
                         containerCode: _container1Controller.text,
-                        seal: containerHarbor!.seal1,
+                        seal: containerHarbor!.seal1.copyWith(
+                          cargoType: widget.task.cargoType1,
+                        ),
                         onSealChanged: (updatedSeal) {
-                          setState(() {
-                            containerHarbor =
-                                containerHarbor!.copyWith(seal1: updatedSeal);
-                          });
+                          containerHarbor =
+                              containerHarbor!.copyWith(seal1: updatedSeal);
                         },
                         onEditContainer: () =>
                             _editContainerCode(context, true),
@@ -567,12 +563,12 @@ class _SealTaskState extends State<SealTask> {
                         key: const ValueKey('container2'),
                         index: 2,
                         containerCode: _container2Controller.text,
-                        seal: containerHarbor!.seal2,
+                        seal: containerHarbor!.seal2.copyWith(
+                          cargoType: widget.task.cargoType2,
+                        ),
                         onSealChanged: (updatedSeal) {
-                          setState(() {
-                            containerHarbor =
-                                containerHarbor!.copyWith(seal2: updatedSeal);
-                          });
+                          containerHarbor =
+                              containerHarbor!.copyWith(seal2: updatedSeal);
                         },
                         onEditContainer: () =>
                             _editContainerCode(context, false),

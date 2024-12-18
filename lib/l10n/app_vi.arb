@@ -215,5 +215,13 @@
   "dataSent": "Gửi dữ liệu thành công",
   "sendingData": "Đang gửi dữ liệu...",
   "sendFailed": "Lỗi gửi dữ liệu: {error}",
-  "connectError": "Lỗi kết nối. Vui lòng kiểm tra kết nối mạng"
+  "connectError": "Lỗi kết nối. Vui lòng kiểm tra kết nối mạng",
+
+  "cargoTypeLabel": "Loại hàng",
+  "cargoType": "{code, select, AK{Quá khổ} BB{Hàng rời} BN{Gói hàng} DG{Nguy hiểm} DR{Lạnh & Nguy hiểm} ED{Nguy hiểm (rỗng)} FR{Dễ vỡ} GP{Thông dụng} MT{Rỗng} RF{Lạnh} DO{Nguy hiểm & Quá khổ} other{Không xác định}}",
+  "@cargoType": {
+    "placeholders": {
+      "code": {}
+    }
+  }
 } 

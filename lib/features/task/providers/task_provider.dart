@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:mqtt_client/mqtt_client.dart';
+import 'package:smart_gate_new_version/core/configs/app_constants.dart';
 import 'package:smart_gate_new_version/core/services/mqtt_service.dart';
 import 'package:smart_gate_new_version/core/services/checkpoint_service.dart';
 import 'package:smart_gate_new_version/features/task/domain/models/task.dart';
@@ -51,19 +52,17 @@ class TaskProvider extends ChangeNotifier {
                 recMess.payload.message);
             try {
               final data = json.decode(payload);
-              if (data['ContainerCode1'] != null ||
-                  data['ContainerCode2'] != null) {
-                try {
-                  final task = Task.fromJson(data);
-                  if (selectedCheckpointIds
-                          .contains(task.checkPointId.toString()) &&
-                      !_tasks.any((t) => t.eventId == task.eventId)) {
-                    _tasks.insert(0, task);
-                    notifyListeners();
-                  }
-                } catch (e) {
-                  debugPrint('Invalid container data: $e');
-                }
+
+              // Handle cargo type message
+              if (message.topic == AppConstants.mqttTopicCargoType) {
+                _handleCargoTypeMessage(data);
+                continue;
+              }
+
+              // Handle container message (existing logic)
+              if ((data['ContainerCode1']?.toString().isNotEmpty ?? false) ||
+                  (data['ContainerCode2']?.toString().isNotEmpty ?? false)) {
+                _handleContainerMessage(data, selectedCheckpointIds);
               }
             } catch (e) {
               debugPrint('Error parsing MQTT message: $e');
@@ -72,10 +71,66 @@ class TaskProvider extends ChangeNotifier {
         },
       );
 
+      // Subscribe to cargo type topic
+      mqttService.client
+          .subscribe(AppConstants.mqttTopicCargoType, MqttQos.atLeastOnce);
+
       _isInitialized = true;
     } catch (e) {
       debugPrint('Error initializing MQTT in provider: $e');
       _isInitialized = false;
+    }
+  }
+
+  void _handleCargoTypeMessage(Map<String, dynamic> data) {
+    final checkPointId = data['checkPointId'] as int?;
+    if (checkPointId == null) return;
+
+    // Only update if cargo types are null or in default list
+    final shouldUpdateCargoType1 =
+        AppConstants.defaultCargoTypeCode.contains(data['cargoType1']);
+    final shouldUpdateCargoType2 =
+        AppConstants.defaultCargoTypeCode.contains(data['cargoType2']);
+    if (!shouldUpdateCargoType1 && !shouldUpdateCargoType2) {
+      return;
+    }
+    final existingIndex =
+        _tasks.indexWhere((t) => t.checkPointId == checkPointId);
+    if (existingIndex != -1) {
+      final task = _tasks[existingIndex];
+
+      _tasks[existingIndex] = task.copyWith(
+        cargoType1: shouldUpdateCargoType1
+            ? data['cargoType1'] as String?
+            : task.cargoType1,
+        cargoType2: shouldUpdateCargoType2
+            ? data['cargoType2'] as String?
+            : task.cargoType2,
+      );
+      notifyListeners();
+    }
+  }
+
+  void _handleContainerMessage(
+      Map<String, dynamic> data, List<String> selectedCheckpointIds) {
+    try {
+      final task = Task.fromJson(data);
+      if (selectedCheckpointIds.contains(task.checkPointId.toString())) {
+        final existingIndex =
+            _tasks.indexWhere((t) => t.checkPointId == task.checkPointId);
+
+        if (existingIndex != -1) {
+          if (task.timeInOut.isAfter(_tasks[existingIndex].timeInOut)) {
+            _tasks[existingIndex] = task;
+            notifyListeners();
+          }
+        } else {
+          _tasks.insert(0, task);
+          notifyListeners();
+        }
+      }
+    } catch (e) {
+      debugPrint('Invalid container data: $e');
     }
   }
 

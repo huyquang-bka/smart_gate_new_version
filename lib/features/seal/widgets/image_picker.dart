@@ -1,4 +1,5 @@
 import 'package:smart_gate_new_version/core/configs/api_route.dart';
+import 'package:smart_gate_new_version/core/configs/app_constants.dart';
 import 'package:smart_gate_new_version/core/configs/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -12,11 +13,11 @@ class ImagePickerWidget extends StatefulWidget {
   final String? imagePath;
   final String seal1Number;
   final String seal2Number;
-  final bool isDangerous;
+  final String cargoType;
   final Function(String?) onImageChanged;
   final Function(String) onSeal1NumberChanged;
   final Function(String) onSeal2NumberChanged;
-  final Function(bool) onDangerousChanged;
+  final Function(String) onCargoTypeChanged;
 
   const ImagePickerWidget({
     super.key,
@@ -24,11 +25,11 @@ class ImagePickerWidget extends StatefulWidget {
     this.imagePath,
     required this.seal1Number,
     required this.seal2Number,
-    required this.isDangerous,
+    required this.cargoType,
     required this.onImageChanged,
     required this.onSeal1NumberChanged,
     required this.onSeal2NumberChanged,
-    required this.onDangerousChanged,
+    required this.onCargoTypeChanged,
   });
 
   @override
@@ -49,9 +50,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
     super.initState();
     _seal1Controller.text = widget.seal1Number;
     _seal2Controller.text = widget.seal2Number;
-    if (widget.imagePath != null) {
-      image = File(widget.imagePath!);
-    }
+    widget.onCargoTypeChanged(widget.cargoType);
   }
 
   @override
@@ -67,6 +66,9 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
     }
     if (widget.seal2Number != oldWidget.seal2Number) {
       _seal2Controller.text = widget.seal2Number;
+    }
+    if (widget.cargoType != oldWidget.cargoType) {
+      widget.onCargoTypeChanged(widget.cargoType);
     }
   }
 
@@ -196,19 +198,20 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 8),
             Stack(
               children: [
                 Center(
                   child: Container(
                     height: 200,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: AppTheme.primaryColor.withOpacity(0.5),
-                        width: 2,
-                      ),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
+                    decoration: image == null
+                        ? BoxDecoration(
+                            border: Border.all(
+                              color: AppTheme.primaryColor.withOpacity(0.5),
+                              width: 2,
+                            ),
+                            borderRadius: BorderRadius.circular(12),
+                          )
+                        : null,
                     child: image == null
                         ? Center(
                             child: Icon(
@@ -217,15 +220,37 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
                               color: AppTheme.primaryColor.withOpacity(0.5),
                             ),
                           )
-                        : GestureDetector(
-                            onTap: () => _showImagePreview(context),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: Image.file(
-                                image!,
-                                fit: BoxFit.contain,
+                        : Stack(
+                            children: [
+                              GestureDetector(
+                                onTap: () => _showImagePreview(context),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: Image.file(
+                                    image!,
+                                    fit: BoxFit.contain,
+                                  ),
+                                ),
                               ),
-                            ),
+                              Positioned(
+                                top: 0,
+                                right: 0,
+                                child: IconButton(
+                                  icon: const Icon(Icons.delete,
+                                      color: Colors.red, size: 20),
+                                  onPressed: () {
+                                    setState(() {
+                                      image = null;
+                                      _seal1Controller.clear();
+                                      _seal2Controller.clear();
+                                    });
+                                    widget.onImageChanged(null);
+                                    widget.onSeal1NumberChanged('');
+                                    widget.onSeal2NumberChanged('');
+                                  },
+                                ),
+                              ),
+                            ],
                           ),
                   ),
                 ),
@@ -284,45 +309,9 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
                     color: AppTheme.primaryColor,
                   ),
                 ),
-                if (image != null) ...[
-                  const SizedBox(width: 8),
-                  Container(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: Colors.red,
-                        width: 1,
-                      ),
-                    ),
-                    child: IconButton(
-                      onPressed: _isLoading
-                          ? null
-                          : () {
-                              setState(() {
-                                image = null;
-                                _seal1Controller.clear();
-                                _seal2Controller.clear();
-                              });
-                              widget.onImageChanged(null);
-                              widget.onSeal1NumberChanged('');
-                              widget.onSeal2NumberChanged('');
-                            },
-                      icon: const Icon(Icons.delete),
-                      tooltip: l10n.deletePhoto,
-                      color: Colors.red,
-                    ),
-                  ),
-                ],
-                const Spacer(),
-                Row(
-                  children: [
-                    Text(l10n.dangerous),
-                    Switch(
-                      value: widget.isDangerous,
-                      onChanged: _isLoading ? null : widget.onDangerousChanged,
-                      activeColor: Colors.red,
-                    ),
-                  ],
+                const SizedBox(width: 16),
+                Expanded(
+                  child: _buildCargoTypeDropdown(context),
                 ),
               ],
             ),
@@ -351,6 +340,28 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildCargoTypeDropdown(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return DropdownButtonFormField<String>(
+      value: widget.cargoType,
+      decoration: InputDecoration(
+        labelText: l10n.cargoTypeLabel,
+        border: const OutlineInputBorder(),
+      ),
+      items: AppConstants.defaultCargoTypeCode.map((String code) {
+        return DropdownMenuItem<String>(
+          value: code,
+          child: Text('$code - ${l10n.cargoType(code)}'),
+        );
+      }).toList(),
+      onChanged: (String? newValue) {
+        if (newValue != null) {
+          widget.onCargoTypeChanged(newValue);
+        }
+      },
     );
   }
 }

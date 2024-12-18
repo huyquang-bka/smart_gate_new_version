@@ -10,6 +10,22 @@ class AppConstants {
   static const String companyName = 'ATIN';
   static const String companyWebsite = 'https://atin.com.vn';
   static const String copyright = '© 2024 ATIN. All rights reserved.';
+
+  //default list cargo type code
+  static const List<String> defaultCargoTypeCode = [
+    'AK', // Over Dimension
+    'BB', // Break Bulk
+    'BN', // Bundle
+    'DG', // Dangerous
+    'DR', // Reefer & DG
+    'ED', // Dangerous Empty
+    'FR', // Fragile
+    'GP', // General
+    'MT', // Empty
+    'RF', // Reefer
+    'DO', // DG & Over Dimension
+  ];
+
   // API Endpoints
   static const String baseUrl = 'https://api.example.com';
   static const int apiTimeout = 30000; // milliseconds
@@ -17,6 +33,14 @@ class AppConstants {
   // Storage Keys
   static const String tokenKey = 'auth_token';
   static const String userKey = 'user_data';
+
+  // MQTT Topics
+  static const String mqttBroker = '27.72.98.49';
+  static const String mqttTopicEvent = "Event/Container";
+  static const String mqttTopicCargoType = "Event/CargoType";
+  static const int mqttPort = 58883;
+  static const String mqttUsername = 'admin';
+  static const String mqttPassword = 'admin';
 
   // Dimensions
   static const double defaultPadding = 16.0;

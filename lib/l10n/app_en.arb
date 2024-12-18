@@ -432,5 +432,13 @@
       "error": {}
     }
   },
-  "connectError": "Connection error. Please check your connection"
+  "connectError": "Connection error. Please check your connection",
+
+  "cargoTypeLabel": "Cargo Type",
+  "cargoType": "{code, select, AK{Over Dimension} BB{Break Bulk} BN{Bundle} DG{Dangerous} DR{Reefer & DG} ED{Dangerous Empty} FR{Fragile} GP{General} MT{Empty} RF{Reefer} DO{DG & Over Dimension} other{Unknown}}",
+  "@cargoType": {
+    "placeholders": {
+      "code": {}
+    }
+  }
 } 

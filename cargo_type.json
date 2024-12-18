@@ -1,0 +1,46 @@
+{
+  "AK": {
+    "english": "Over Dimension",
+    "vietnamese": "Quá khổ"
+  },
+  "BB": {
+    "english": "Break Bulk", 
+    "vietnamese": "Hàng rời"
+  },
+  "BN": {
+    "english": "Bundle",
+    "vietnamese": "Gói hàng"
+  },
+  "DG": {
+    "english": "Dangerous",
+    "vietnamese": "Nguy hiểm"
+  },
+  "DR": {
+    "english": "Reefer & DG",
+    "vietnamese": "Lạnh & Nguy hiểm"
+  },
+  "ED": {
+    "english": "Dangerous Empty",
+    "vietnamese": "Nguy hiểm (rỗng)"
+  },
+  "FR": {
+    "english": "Fragile",
+    "vietnamese": "Dễ vỡ"
+  },
+  "GP": {
+    "english": "General",
+    "vietnamese": "Thông dụng"
+  },
+  "MT": {
+    "english": "Empty",
+    "vietnamese": "Rỗng"
+  },
+  "RF": {
+    "english": "Reefer",
+    "vietnamese": "Lạnh"
+  },
+  "DO": {
+    "english": "DG & Over Dimension",
+    "vietnamese": "Nguy hiểm & Quá khổ"
+  }
+}
