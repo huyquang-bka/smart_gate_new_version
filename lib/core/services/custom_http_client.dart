@@ -150,7 +150,6 @@ class CustomHttpClient {
 
   Future<int> login(String username, String password) async {
     final url = Uri.parse(Url.auth);
-
     Map<String, String> payload = Map.from(AuthBody.login(
       username: username,
       password: password,

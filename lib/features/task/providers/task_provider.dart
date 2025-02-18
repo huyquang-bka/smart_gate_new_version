@@ -39,11 +39,7 @@ class TaskProvider extends ChangeNotifier {
     if (_isInitialized) return;
 
     try {
-      final selectedCheckpointIds =
-          await CheckpointService.getSelectedCheckpointIds();
-
       await _mqttSubscription?.cancel();
-
       _mqttSubscription = mqttService.client.updates?.listen(
         (List<MqttReceivedMessage<MqttMessage>> messages) {
           for (var message in messages) {
@@ -52,7 +48,6 @@ class TaskProvider extends ChangeNotifier {
                 recMess.payload.message);
             try {
               final data = json.decode(payload);
-
               // Handle cargo type message
               if (message.topic == AppConstants.mqttTopicCargoType) {
                 _handleCargoTypeMessage(data);
@@ -62,7 +57,7 @@ class TaskProvider extends ChangeNotifier {
               // Handle container message (existing logic)
               if ((data['ContainerCode1']?.toString().isNotEmpty ?? false) ||
                   (data['ContainerCode2']?.toString().isNotEmpty ?? false)) {
-                _handleContainerMessage(data, selectedCheckpointIds);
+                _handleContainerMessage(data);
               }
             } catch (e) {
               debugPrint('Error parsing MQTT message: $e');
@@ -111,9 +106,10 @@ class TaskProvider extends ChangeNotifier {
     }
   }
 
-  void _handleContainerMessage(
-      Map<String, dynamic> data, List<String> selectedCheckpointIds) {
+  void _handleContainerMessage(Map<String, dynamic> data) async {
     try {
+      final selectedCheckpointIds =
+          await CheckpointService.getSelectedCheckpointIds();
       final task = Task.fromJson(data);
       if (selectedCheckpointIds.contains(task.checkPointId.toString())) {
         final existingIndex =

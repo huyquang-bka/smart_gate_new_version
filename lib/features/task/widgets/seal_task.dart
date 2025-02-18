@@ -29,6 +29,7 @@ class SealTask extends StatefulWidget {
 
 class _SealTaskState extends State<SealTask> {
   static const String _baseTopic = 'Event/Seal';
+  static const int _maxUploadRetries = 3;
 
   ContainerHarbor? containerHarbor;
   bool isLoading = true;
@@ -179,23 +180,35 @@ class _SealTaskState extends State<SealTask> {
   }
 
   Future<String?> _uploadImage(String imagePath) async {
-    try {
-      final uri = Uri.parse(Url.saveFile);
-      final request = await customHttpClient.multipartRequest('POST', uri);
+    int retryCount = 0;
+    while (retryCount < _maxUploadRetries) {
+      try {
+        final uri = Uri.parse(Url.saveFile);
+        final request = await customHttpClient.multipartRequest('POST', uri);
 
-      request.files.add(
-        await http.MultipartFile.fromPath('file', imagePath),
-      );
+        request.files.add(
+          await http.MultipartFile.fromPath('file', imagePath),
+        );
 
-      final response = await customHttpClient.sendMultipartRequest(request);
-      if (response.statusCode == 200) {
-        final responseBody = await response.stream.bytesToString();
-        return responseBody.replaceAll('"', '');
+        final response = await customHttpClient.sendMultipartRequest(request);
+        if (response.statusCode == 200) {
+          final responseBody = await response.stream.bytesToString();
+          return responseBody.replaceAll('"', '');
+        }
+        retryCount++;
+        if (retryCount == _maxUploadRetries) {
+          throw Exception(
+              'Failed to upload image after $_maxUploadRetries attempts: ${response.statusCode}');
+        }
+      } catch (e) {
+        retryCount++;
+        if (retryCount == _maxUploadRetries) {
+          throw Exception(
+              'Error uploading image after $_maxUploadRetries attempts: $e');
+        }
       }
-      throw Exception('Failed to upload image: ${response.statusCode}');
-    } catch (e) {
-      throw Exception('Error uploading image: $e');
     }
+    return null;
   }
 
   Future<void> _handleSend() async {
@@ -206,23 +219,39 @@ class _SealTaskState extends State<SealTask> {
     _descriptionFocusNode.unfocus();
     print("-----------Container Harbor: ${containerHarbor!}");
     if (!_validateSealData(l10n)) return;
-
+    _showLoadingDialog(l10n);
+    // Upload seal images
     try {
-      _showLoadingDialog(l10n);
-
       await _uploadSealImages();
-      await _uploadAdditionalImages();
-      _updateContainerHarborData();
-      await _sendDataViaMqtt();
-
-      if (!mounted) return;
-      Navigator.pop(context); // Remove loading dialog
-      await _showSuccessDialog(l10n);
     } catch (e) {
       if (!mounted) return;
       Navigator.pop(context);
       _showErrorDialog(l10n, e.toString());
+      return;
     }
+    // Upload additional images
+    try {
+      await _uploadAdditionalImages();
+    } catch (e) {
+      if (!mounted) return;
+      Navigator.pop(context);
+      _showErrorDialog(l10n, e.toString());
+      return;
+    }
+    // Send data via MQTT
+    try {
+      _updateContainerHarborData();
+      await _sendDataViaMqtt();
+    } catch (e) {
+      if (!mounted) return;
+      Navigator.pop(context);
+      _showErrorDialog(l10n, e.toString());
+      return;
+    }
+    // Show success dialog
+    if (!mounted) return;
+    Navigator.pop(context); // Remove loading dialog
+    await _showSuccessDialog(l10n);
   }
 
   bool _validateSealData(AppLocalizations l10n) {
@@ -550,11 +579,17 @@ class _SealTaskState extends State<SealTask> {
                         index: 1,
                         containerCode: _container1Controller.text,
                         seal: containerHarbor!.seal1.copyWith(
-                          cargoType: widget.task.cargoType1,
+                          cargoType: containerHarbor!.seal1.cargoType.isEmpty
+                              ? widget.task.cargoType1
+                              : containerHarbor!.seal1.cargoType,
                         ),
                         onSealChanged: (updatedSeal) {
-                          containerHarbor =
-                              containerHarbor!.copyWith(seal1: updatedSeal);
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            setState(() {
+                              containerHarbor =
+                                  containerHarbor!.copyWith(seal1: updatedSeal);
+                            });
+                          });
                         },
                         onEditContainer: () =>
                             _editContainerCode(context, true),
@@ -564,11 +599,17 @@ class _SealTaskState extends State<SealTask> {
                         index: 2,
                         containerCode: _container2Controller.text,
                         seal: containerHarbor!.seal2.copyWith(
-                          cargoType: widget.task.cargoType2,
+                          cargoType: containerHarbor!.seal2.cargoType.isEmpty
+                              ? widget.task.cargoType2
+                              : containerHarbor!.seal2.cargoType,
                         ),
                         onSealChanged: (updatedSeal) {
-                          containerHarbor =
-                              containerHarbor!.copyWith(seal2: updatedSeal);
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            setState(() {
+                              containerHarbor =
+                                  containerHarbor!.copyWith(seal2: updatedSeal);
+                            });
+                          });
                         },
                         onEditContainer: () =>
                             _editContainerCode(context, false),

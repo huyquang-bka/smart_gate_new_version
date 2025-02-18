@@ -50,6 +50,9 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
     super.initState();
     _seal1Controller.text = widget.seal1Number;
     _seal2Controller.text = widget.seal2Number;
+    if (widget.imagePath != null) {
+      image = File(widget.imagePath!);
+    }
     widget.onCargoTypeChanged(widget.cargoType);
   }
 
@@ -99,7 +102,6 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
       final response = await request.send().timeout(
             const Duration(seconds: 3),
           );
-
       if (response.statusCode == 200) {
         final responseBody = await response.stream.bytesToString();
         final jsonData = jsonDecode(responseBody);

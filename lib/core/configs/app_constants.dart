@@ -26,19 +26,15 @@ class AppConstants {
     'DO', // DG & Over Dimension
   ];
 
-  // API Endpoints
-  static const String baseUrl = 'https://api.example.com';
-  static const int apiTimeout = 30000; // milliseconds
-
   // Storage Keys
   static const String tokenKey = 'auth_token';
   static const String userKey = 'user_data';
 
   // MQTT Topics
-  static const String mqttBroker = '27.72.98.49';
+  static const String mqttBroker = '172.34.64.10';
   static const String mqttTopicEvent = "Event/Container";
   static const String mqttTopicCargoType = "Event/CargoType";
-  static const int mqttPort = 58883;
+  static const int mqttPort = 1883;
   static const String mqttUsername = 'admin';
   static const String mqttPassword = 'admin';
 
