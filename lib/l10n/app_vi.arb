@@ -26,6 +26,13 @@
   "checkpointInfo": "Thông tin làn",
   "selectCheckpoint": "Chọn làn",
   "code": "Mã: {code}",
+  "@code": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
   "lane": "Điểm giám sát: {lane}",
   "container": "Container {index}",
   "sealNumber": "Số seal {index}",
@@ -56,7 +63,9 @@
   "currentVersion": "Phiên bản hiện tại: {version}",
   "@currentVersion": {
     "placeholders": {
-      "version": {}
+      "version": {
+        "type": "Object"
+      }
     }
   },
 
@@ -221,7 +230,22 @@
   "cargoType": "{code, select, AK{Quá khổ} BB{Hàng rời} BN{Gói hàng} DG{Nguy hiểm} DR{Lạnh & Nguy hiểm} ED{Nguy hiểm (rỗng)} FR{Dễ vỡ} GP{Thông dụng} MT{Rỗng} RF{Lạnh} DO{Nguy hiểm & Quá khổ} other{Không xác định}}",
   "@cargoType": {
     "placeholders": {
-      "code": {}
+      "code": {
+        "type": "String"
+      }
     }
-  }
+  },
+
+  "@_SEAL_WARNINGS": {},
+  "warningSealIncomplete": "Thông tin seal chưa đầy đủ",
+  "warningSealMissingText1": "Thiếu số seal 1",
+  "warningSealMissingImage1": "Thiếu ảnh seal 1",
+  "warningSealMissingText2": "Thiếu số seal 2",
+  "warningSealMissingImage2": "Thiếu ảnh seal 2",
+  "warningSealContinue": "Bạn có muốn tiếp tục gửi?",
+  "continueAnyway": "Vẫn Tiếp Tục",
+  "goBack": "Quay Lại",
+
+  "tasksDone": "Nhiệm vụ đã hoàn thành",
+  "noCompletedTasks": "Chưa có nhiệm vụ hoàn thành"
 } 

@@ -1,0 +1,1 @@
+/Users/huyquang/huyquang/flutter-app/smart_gate_new_version/build/app/intermediates/cxx/RelWithDebInfo/16602x87/obj/x86

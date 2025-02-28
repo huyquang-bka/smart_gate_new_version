@@ -12,6 +12,7 @@ import 'dart:convert';
 import 'package:smart_gate_new_version/core/services/checkpoint_service.dart';
 import 'package:smart_gate_new_version/features/seal/domain/models/check_point.dart';
 import 'package:smart_gate_new_version/core/widgets/checkpoint_selection_dialog.dart';
+import 'package:smart_gate_new_version/features/task/presentation/pages/task_done_page.dart';
 
 class AccountPage extends StatelessWidget {
   const AccountPage({super.key});
@@ -27,6 +28,31 @@ class AccountPage extends StatelessWidget {
         centerTitle: true,
         automaticallyImplyLeading: false,
         actions: [
+          IconButton(
+            icon: const Stack(
+              children: [
+                Icon(Icons.task_alt),
+                Positioned(
+                  right: 0,
+                  top: 0,
+                  child: Icon(
+                    Icons.check_circle,
+                    size: 12,
+                    color: Colors.green,
+                  ),
+                ),
+              ],
+            ),
+            tooltip: l10n.tasksDone,
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const TaskDonePage(),
+                ),
+              );
+            },
+          ),
           IconButton(
             icon: const Icon(Icons.location_on),
             onPressed: () async {

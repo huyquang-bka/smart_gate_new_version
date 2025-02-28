@@ -39,6 +39,7 @@ class _TaskPageState extends State<TaskPage> {
         name: l10n.unknownCheckpoint,
         code: '',
         compId: -1,
+        portLocation: 0,
       ),
     );
 
@@ -98,7 +99,7 @@ class _TaskPageState extends State<TaskPage> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   _buildContainerInfo(l10n.container1Label,
-                                      task.containerCode1),
+                                      task.containerCode1 ?? "?"),
                                   _buildContainerInfo(l10n.container2Label,
                                       task.containerCode2 ?? "?"),
                                   const SizedBox(height: 8),

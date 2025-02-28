@@ -96,7 +96,9 @@
   "currentVersion": "Current Version: {version}",
   "@currentVersion": {
     "placeholders": {
-      "version": {}
+      "version": {
+        "type": "Object"
+      }
     }
   },
 
@@ -286,7 +288,9 @@
   "code": "Code: {code}",
   "@code": {
     "placeholders": {
-      "code": {}
+      "code": {
+        "type": "String"
+      }
     }
   },
   "lane": "Lane: {lane}",
@@ -440,5 +444,17 @@
     "placeholders": {
       "code": {}
     }
-  }
+  },
+
+  "@_SEAL_WARNINGS": {},
+  "warningSealIncomplete": "Incomplete Seal Information",
+  "warningSealMissingText1": "Seal number 1 is missing",
+  "warningSealMissingImage1": "Seal image 1 is missing",
+  "warningSealMissingText2": "Seal number 2 is missing",
+  "warningSealMissingImage2": "Seal image 2 is missing",
+  "warningSealContinue": "Do you want to continue sending?",
+  "continueAnyway": "Continue Anyway",
+  "goBack": "Go Back",
+  "tasksDone": "Tasks Done",
+  "noCompletedTasks": "No completed tasks"
 } 

@@ -1,7 +1,7 @@
 class AppConstants {
   // App Information
   static const String appName = 'Smart Gate';
-  static const String appVersion = '1.0.0';
+  static const String appVersion = '1.3.0';
   static const String userGithub = 'huyquang-bka';
   static const String repoName = 'smart_gate_new_version';
   static const String adminEmail = 'admin@atin.com.vn';
@@ -31,9 +31,11 @@ class AppConstants {
   static const String userKey = 'user_data';
 
   // MQTT Topics
+  // static const String mqttBroker = '27.72.98.49';
   static const String mqttBroker = '172.34.64.10';
   static const String mqttTopicEvent = "Event/Container";
   static const String mqttTopicCargoType = "Event/CargoType";
+  static const String mqttTopicCheckSeal = "Event/CheckSeal";
   static const int mqttPort = 1883;
   static const String mqttUsername = 'admin';
   static const String mqttPassword = 'admin';

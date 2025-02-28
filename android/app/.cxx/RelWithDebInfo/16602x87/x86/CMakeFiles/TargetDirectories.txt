@@ -1,0 +1,2 @@
+/Users/huyquang/huyquang/flutter-app/smart_gate_new_version/android/app/.cxx/RelWithDebInfo/16602x87/x86/CMakeFiles/edit_cache.dir
+/Users/huyquang/huyquang/flutter-app/smart_gate_new_version/android/app/.cxx/RelWithDebInfo/16602x87/x86/CMakeFiles/rebuild_cache.dir

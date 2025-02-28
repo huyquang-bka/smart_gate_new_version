@@ -5,6 +5,7 @@ import 'package:mqtt_client/mqtt_client.dart';
 import 'package:smart_gate_new_version/core/configs/app_constants.dart';
 import 'package:smart_gate_new_version/core/services/mqtt_service.dart';
 import 'package:smart_gate_new_version/core/services/checkpoint_service.dart';
+import 'package:smart_gate_new_version/features/seal/domain/models/check_point.dart';
 import 'package:smart_gate_new_version/features/task/domain/models/task.dart';
 
 class TaskProvider extends ChangeNotifier {
@@ -48,9 +49,16 @@ class TaskProvider extends ChangeNotifier {
                 recMess.payload.message);
             try {
               final data = json.decode(payload);
+
               // Handle cargo type message
               if (message.topic == AppConstants.mqttTopicCargoType) {
                 _handleCargoTypeMessage(data);
+                continue;
+              }
+
+              // Handle check seal message
+              if (message.topic == AppConstants.mqttTopicCheckSeal) {
+                _handleContainerGateMessage(data);
                 continue;
               }
 
@@ -66,9 +74,11 @@ class TaskProvider extends ChangeNotifier {
         },
       );
 
-      // Subscribe to cargo type topic
+      // Subscribe to all required topics
       mqttService.client
           .subscribe(AppConstants.mqttTopicCargoType, MqttQos.atLeastOnce);
+      mqttService.client
+          .subscribe(AppConstants.mqttTopicCheckSeal, MqttQos.atLeastOnce);
 
       _isInitialized = true;
     } catch (e) {
@@ -106,11 +116,65 @@ class TaskProvider extends ChangeNotifier {
     }
   }
 
+  void _handleContainerGateMessage(Map<String, dynamic> data) async {
+    try {
+      print("ContainerGateMessage: $data");
+      final selectedCheckpointIds =
+          await CheckpointService.getSelectedCheckpointIds();
+      final task = Task.fromJson({
+        'EventId': data['EventId'] as String,
+        'CheckPointId': data['CheckPointId'] as int,
+        'ContainerCode1': data['ContainerCode1'] as String?,
+        'ContainerCode2': data['ContainerCode2'] as String?,
+        'TimeInOut': data['TimeInOut'] as String,
+        'cargoType1': 'GP', // Default cargo type
+        'cargoType2': 'GP', // Default cargo type
+      });
+      print("Task checkPointId: ${task.checkPointId}");
+      print("Selected checkpoint ids: $selectedCheckpointIds");
+      if (selectedCheckpointIds.contains(task.checkPointId.toString())) {
+        final existingIndex =
+            _tasks.indexWhere((t) => t.checkPointId == task.checkPointId);
+
+        if (existingIndex != -1) {
+          if (task.timeInOut.isAfter(_tasks[existingIndex].timeInOut)) {
+            _tasks[existingIndex] = task;
+            notifyListeners();
+          }
+        } else {
+          _tasks.insert(0, task);
+          notifyListeners();
+        }
+      }
+    } catch (e) {
+      debugPrint('Invalid gate message data: $e');
+    }
+  }
+
   void _handleContainerMessage(Map<String, dynamic> data) async {
     try {
       final selectedCheckpointIds =
           await CheckpointService.getSelectedCheckpointIds();
       final task = Task.fromJson(data);
+      final checkpoints = await CheckpointService.getAllCheckpoints();
+
+      // Find the checkpoint for this task
+      final checkpoint = checkpoints.firstWhere(
+        (cp) => cp.id == task.checkPointId,
+        orElse: () => const CheckPoint(
+          id: -1,
+          name: 'Unknown',
+          code: '',
+          compId: -1,
+          portLocation: 0,
+        ),
+      );
+      print("Checkpoint portLocation: ${checkpoint.portLocation}");
+      // Skip task creation if portLocation is less than 3
+      if (checkpoint.portLocation < 3) {
+        return;
+      }
+
       if (selectedCheckpointIds.contains(task.checkPointId.toString())) {
         final existingIndex =
             _tasks.indexWhere((t) => t.checkPointId == task.checkPointId);

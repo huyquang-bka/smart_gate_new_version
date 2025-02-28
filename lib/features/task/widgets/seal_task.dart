@@ -211,15 +211,149 @@ class _SealTaskState extends State<SealTask> {
     return null;
   }
 
+  Future<bool> _showSealWarningDialog(List<String> warnings) async {
+    final l10n = AppLocalizations.of(context)!;
+    return await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Row(
+          children: [
+            const Icon(
+              Icons.warning_amber_rounded,
+              color: Colors.orange,
+              size: 28,
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                l10n.warningSealIncomplete,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ...warnings.map((warning) => Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text('• ', style: TextStyle(fontSize: 16)),
+                      Expanded(
+                        child: Text(
+                          warning,
+                          style: const TextStyle(fontSize: 14),
+                        ),
+                      ),
+                    ],
+                  ),
+                )),
+            const SizedBox(height: 16),
+            Text(
+              l10n.warningSealContinue,
+              style: const TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: 15,
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            style: TextButton.styleFrom(
+              backgroundColor: Colors.red.shade50,
+              side: BorderSide(color: Colors.red.shade200),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.close, size: 20, color: Colors.red.shade700),
+                const SizedBox(width: 4),
+                Text(
+                  l10n.goBack,
+                  style: TextStyle(color: Colors.red.shade700),
+                ),
+              ],
+            ),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            style: TextButton.styleFrom(
+              backgroundColor: Colors.green.shade50,
+              side: BorderSide(color: Colors.green.shade200),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.check_circle_outline, size: 20, color: Colors.green.shade700),
+                const SizedBox(width: 4),
+                Text(
+                  l10n.continueAnyway,
+                  style: TextStyle(color: Colors.green.shade700),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    ) ?? false;
+  }
+
   Future<void> _handleSend() async {
     final l10n = AppLocalizations.of(context)!;
     if (containerHarbor == null) return;
+    
     _container1FocusNode.unfocus();
     _container2FocusNode.unfocus();
     _descriptionFocusNode.unfocus();
+
+    // Check for missing information
+    List<String> warnings = [];
+    
+    // Check seal 1
+    if (containerHarbor!.seal1.sealNumber1.isEmpty) {
+      warnings.add(l10n.warningSealMissingText1);
+    }
+    if (containerHarbor!.seal1.imagePath == null) {
+      warnings.add(l10n.warningSealMissingImage1);
+    }
+    
+    // Check seal 2 (only if container 2 exists)
+    if (widget.task.containerCode2 != null) {
+      if (containerHarbor!.seal2.sealNumber1.isEmpty) {
+        warnings.add(l10n.warningSealMissingText2);
+      }
+      if (containerHarbor!.seal2.imagePath == null) {
+        warnings.add(l10n.warningSealMissingImage2);
+      }
+    }
+
+    // If there are warnings, show dialog
+    if (warnings.isNotEmpty) {
+      final shouldContinue = await _showSealWarningDialog(warnings);
+      if (!shouldContinue) {
+        return;
+      }
+    }
+
     print("-----------Container Harbor: ${containerHarbor!}");
-    if (!_validateSealData(l10n)) return;
     _showLoadingDialog(l10n);
+
     // Upload seal images
     try {
       await _uploadSealImages();
@@ -229,6 +363,7 @@ class _SealTaskState extends State<SealTask> {
       _showErrorDialog(l10n, e.toString());
       return;
     }
+
     // Upload additional images
     try {
       await _uploadAdditionalImages();
@@ -238,6 +373,7 @@ class _SealTaskState extends State<SealTask> {
       _showErrorDialog(l10n, e.toString());
       return;
     }
+
     // Send data via MQTT
     try {
       _updateContainerHarborData();
@@ -248,20 +384,21 @@ class _SealTaskState extends State<SealTask> {
       _showErrorDialog(l10n, e.toString());
       return;
     }
+
     // Show success dialog
     if (!mounted) return;
     Navigator.pop(context); // Remove loading dialog
     await _showSuccessDialog(l10n);
   }
 
-  bool _validateSealData(AppLocalizations l10n) {
-    if (containerHarbor!.seal1.imagePath == null ||
-        containerHarbor!.seal1.sealNumber1.isEmpty) {
-      _showWarningDialog(l10n);
-      return false;
-    }
-    return true;
-  }
+  // bool _validateSealData(AppLocalizations l10n) {
+  //   if (containerHarbor!.seal1.imagePath == null ||
+  //       containerHarbor!.seal1.sealNumber1.isEmpty) {
+  //     _showWarningDialog(l10n);
+  //     return false;
+  //   }
+  //   return true;
+  // }
 
   void _showLoadingDialog(AppLocalizations l10n) {
     showDialog(
@@ -362,30 +499,30 @@ class _SealTaskState extends State<SealTask> {
     );
   }
 
-  void _showWarningDialog(AppLocalizations l10n) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Row(
-          children: [
-            const Icon(Icons.warning, color: Colors.orange),
-            const SizedBox(width: 8),
-            Expanded(
-              child: Text(l10n.warning,
-                  maxLines: 2, overflow: TextOverflow.ellipsis),
-            ),
-          ],
-        ),
-        content: Text(l10n.fillSealData),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text(l10n.ok),
-          ),
-        ],
-      ),
-    );
-  }
+  // void _showWarningDialog(AppLocalizations l10n) {
+  //   showDialog(
+  //     context: context,
+  //     builder: (context) => AlertDialog(
+  //       title: Row(
+  //         children: [
+  //           const Icon(Icons.warning, color: Colors.orange),
+  //           const SizedBox(width: 8),
+  //           Expanded(
+  //             child: Text(l10n.warning,
+  //                 maxLines: 2, overflow: TextOverflow.ellipsis),
+  //           ),
+  //         ],
+  //       ),
+  //       content: Text(l10n.fillSealData),
+  //       actions: [
+  //         TextButton(
+  //           onPressed: () => Navigator.pop(context),
+  //           child: Text(l10n.ok),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   void _showErrorDialog(AppLocalizations l10n, String error) {
     showDialog(

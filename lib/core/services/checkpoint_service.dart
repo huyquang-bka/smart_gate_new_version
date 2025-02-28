@@ -1,5 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 
 import 'package:smart_gate_new_version/features/seal/domain/models/check_point.dart';
 
@@ -16,26 +17,33 @@ class CheckpointService {
               'code': cp.code,
               'laneName': cp.lanename ?? '',
               'compId': cp.compId,
+              'portLocation': cp.portLocation,
             })
         .toList();
     await prefs.setString(_allCheckpointsKey, jsonEncode(checkpointMap));
   }
 
   static Future<List<CheckPoint>> getAllCheckpoints() async {
-    final prefs = await SharedPreferences.getInstance();
-    final String? data = prefs.getString(_allCheckpointsKey);
-    if (data == null) return [];
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final String? data = prefs.getString(_allCheckpointsKey);
+      if (data == null) return [];
 
-    final List<dynamic> checkpoints = jsonDecode(data);
-    return checkpoints
-        .map((cp) => CheckPoint(
-              id: int.parse(cp['id']),
-              name: cp['name'],
-              code: cp['code'],
-              lanename: cp['laneName'],
-              compId: cp['compId'],
-            ))
-        .toList();
+      final List<dynamic> checkpoints = jsonDecode(data);
+      return checkpoints
+          .map((cp) => CheckPoint(
+                id: int.parse(cp['id']),
+                name: cp['name'],
+                code: cp['code'],
+                compId: cp['compId'],
+                portLocation: cp['portLocation'] ?? 0,
+                lanename: cp['laneName'],
+              ))
+          .toList();
+    } catch (e) {
+      debugPrint('Error getting checkpoints: $e');
+      return [];
+    }
   }
 
   static Future<List<String>> getSelectedCheckpointIds() async {
@@ -52,8 +60,11 @@ class CheckpointService {
   static Future<List<CheckPoint>> getSelectedCheckpoints() async {
     final selectedIds = await getSelectedCheckpointIds();
     final allCheckpoints = await getAllCheckpoints();
-    print("getSelectedCheckpoints: $selectedIds");
-    print("getAllCheckpoints: ${allCheckpoints.length}");
+    for (var cp in allCheckpoints) {
+      print("Checkpoint: ${cp.toJson()}");
+    }
+    print("*" * 100);
+    print("Number of all Checkpoint: ${allCheckpoints.length}");
     return allCheckpoints
         .where((cp) => selectedIds.contains(cp.id.toString()))
         .toList();

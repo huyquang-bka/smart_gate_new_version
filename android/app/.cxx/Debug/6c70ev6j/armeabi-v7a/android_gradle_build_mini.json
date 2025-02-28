@@ -1,0 +1,20 @@
+{
+  "buildFiles": [
+    "/Users/huyquang/development/flutter/packages/flutter_tools/gradle/src/main/groovy/CMakeLists.txt"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "/Users/huyquang/Library/Android/sdk/cmake/3.22.1/bin/ninja",
+      "-C",
+      "/Users/huyquang/huyquang/flutter-app/smart_gate_new_version/android/app/.cxx/Debug/6c70ev6j/armeabi-v7a",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "/Users/huyquang/Library/Android/sdk/cmake/3.22.1/bin/ninja",
+    "-C",
+    "/Users/huyquang/huyquang/flutter-app/smart_gate_new_version/android/app/.cxx/Debug/6c70ev6j/armeabi-v7a",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {}
+}

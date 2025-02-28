@@ -68,8 +68,18 @@ class MqttService {
     print('Connected');
     _isConnected = true;
     _connectionController.add(true);
-    client.subscribe(AppConstants.mqttTopicEvent, MqttQos.atLeastOnce);
-    client.subscribe(AppConstants.mqttTopicCargoType, MqttQos.atLeastOnce);
+    
+    // Subscribe to all required topics
+    final topics = [
+      AppConstants.mqttTopicEvent,
+      AppConstants.mqttTopicCargoType,
+      AppConstants.mqttTopicCheckSeal,
+    ];
+
+    for (var topic in topics) {
+      client.subscribe(topic, MqttQos.atLeastOnce);
+    }
+    
     _stopReconnectTimer();
   }
 

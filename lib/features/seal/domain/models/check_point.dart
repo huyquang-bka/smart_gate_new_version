@@ -9,7 +9,7 @@ class CheckPoint {
   final String? devicesId;
   final String? devicesName;
   final String name;
-  final int? portLocation;
+  final int portLocation;
   final String? portLocationStr;
   final String? note;
   final bool? status;
@@ -24,10 +24,10 @@ class CheckPoint {
     required this.code,
     required this.compId,
     required this.name,
+    required this.portLocation,
     this.compName,
     this.devicesId,
     this.devicesName,
-    this.portLocation,
     this.portLocationStr,
     this.note,
     this.status,
@@ -43,10 +43,10 @@ class CheckPoint {
         code: json['code'] as String,
         compId: json['compId'] as int,
         name: json['name'] as String,
+        portLocation: json['portLocation'] as int? ?? 0,
         compName: json['compName'] as String?,
         devicesId: json['devicesId'] as String?,
         devicesName: json['devicesName'] as String?,
-        portLocation: json['portLocation'] as int?,
         portLocationStr: json['portLocationStr'] as String?,
         note: json['note'] as String?,
         status: json['status'] as bool?,
@@ -62,10 +62,10 @@ class CheckPoint {
         'code': code,
         'compId': compId,
         'name': name,
+        'portLocation': portLocation,
         if (compName != null) 'compName': compName,
         if (devicesId != null) 'devicesId': devicesId,
         if (devicesName != null) 'devicesName': devicesName,
-        if (portLocation != null) 'portLocation': portLocation,
         if (portLocationStr != null) 'portLocationStr': portLocationStr,
         if (note != null) 'note': note,
         if (status != null) 'status': status,
@@ -81,10 +81,10 @@ class CheckPoint {
     String? code,
     int? compId,
     String? name,
+    int? portLocation,
     String? compName,
     String? devicesId,
     String? devicesName,
-    int? portLocation,
     String? portLocationStr,
     String? note,
     bool? status,
@@ -99,10 +99,10 @@ class CheckPoint {
         code: code ?? this.code,
         compId: compId ?? this.compId,
         name: name ?? this.name,
+        portLocation: portLocation ?? this.portLocation,
         compName: compName ?? this.compName,
         devicesId: devicesId ?? this.devicesId,
         devicesName: devicesName ?? this.devicesName,
-        portLocation: portLocation ?? this.portLocation,
         portLocationStr: portLocationStr ?? this.portLocationStr,
         note: note ?? this.note,
         status: status ?? this.status,

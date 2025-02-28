@@ -1,16 +1,17 @@
-# smart_gate_new_version
+# Cập nhật ứng dụng cho cảng Lạch Huyện (03/03/2025)
 
-A new Flutter project.
+## ✨ Tính năng mới
 
-## Getting Started
+- Thêm thông báo nhắc nhở khi thiếu thông tin seal
+- Tích hợp nguồn dữ liệu seal:
+  - Tại Gate: Lấy từ ứng dụng Desktop
+  - Tại CheckPoint: Lấy từ hệ thống AI
 
-This project is a starting point for a Flutter application.
+## 🐛 Sửa lỗi
 
-A few resources to get you started if this is your first Flutter project:
+- Khắc phục lỗi mất ảnh khi chuyển đổi giữa các màn hình seal
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## 🚧 Đang phát triển
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- Tính năng xem lịch sử hoạt động người dùng (Đang chờ API từ backend)
+- Cải thiện khả năng nhận diện seal (Sẽ được cập nhật từ hệ thống AI)
