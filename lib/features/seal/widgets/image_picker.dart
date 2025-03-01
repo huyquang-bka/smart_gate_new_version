@@ -105,7 +105,6 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
       if (response.statusCode == 200) {
         final responseBody = await response.stream.bytesToString();
         final jsonData = jsonDecode(responseBody);
-        print("Response: ${jsonData}");
         final recognizedText = jsonData['text'].toString().toUpperCase();
 
         setState(() {
