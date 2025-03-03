@@ -45,9 +45,10 @@ flutter:
   assets:
     - lib/assets/icons/logo/CHP_logo.png
     - lib/assets/icons/logo/CHP_logo.jpg
+    - lib/assets/icons/logo/htit-logo.png
 
 flutter_launcher_icons:
   android: true
   ios: true
-  image_path: "lib/assets/icons/logo/CHP_logo.jpg"
+  image_path: "lib/assets/icons/logo/htit-logo.png"
 

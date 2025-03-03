@@ -100,7 +100,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
       );
 
       final response = await request.send().timeout(
-            const Duration(seconds: 3),
+            const Duration(seconds: 5),
           );
       if (response.statusCode == 200) {
         final responseBody = await response.stream.bytesToString();

@@ -251,10 +251,10 @@ class _LoginPageState extends State<LoginPage> {
                       children: [
                         // Logo and Title
                         Image.asset(
-                          'lib/assets/icons/logo/CHP_logo.png',
+                          'lib/assets/icons/logo/htit-logo.png',
                           width: 80,
                           height: 80,
-                          color: AppTheme.primaryColor,
+                          // color: AppTheme.primaryColor,
                           errorBuilder: (context, error, stack) =>
                               const SizedBox.shrink(),
                         ),
