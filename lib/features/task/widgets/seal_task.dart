@@ -213,14 +213,15 @@ class _SealTaskState extends State<SealTask> {
 
   Future<bool> _showSealWarningDialog(List<String> warnings) async {
     final l10n = AppLocalizations.of(context)!;
-    return await showDialog<bool>(
+    await showDialog<void>(
       context: context,
+      barrierDismissible: false,
       builder: (context) => AlertDialog(
         title: Row(
           children: [
             const Icon(
-              Icons.warning_amber_rounded,
-              color: Colors.orange,
+              Icons.error,
+              color: Colors.red,
               size: 28,
             ),
             const SizedBox(width: 8),
@@ -254,77 +255,31 @@ class _SealTaskState extends State<SealTask> {
                     ],
                   ),
                 )),
-            const SizedBox(height: 16),
-            Text(
-              l10n.warningSealContinue,
-              style: const TextStyle(
-                fontWeight: FontWeight.w500,
-                fontSize: 15,
-              ),
-            ),
           ],
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.of(context).pop(false),
-            style: TextButton.styleFrom(
-              backgroundColor: Colors.red.shade50,
-              side: BorderSide(color: Colors.red.shade200),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(Icons.close, size: 20, color: Colors.red.shade700),
-                const SizedBox(width: 4),
-                Text(
-                  l10n.goBack,
-                  style: TextStyle(color: Colors.red.shade700),
-                ),
-              ],
-            ),
-          ),
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(true),
-            style: TextButton.styleFrom(
-              backgroundColor: Colors.green.shade50,
-              side: BorderSide(color: Colors.green.shade200),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(Icons.check_circle_outline, size: 20, color: Colors.green.shade700),
-                const SizedBox(width: 4),
-                Text(
-                  l10n.continueAnyway,
-                  style: TextStyle(color: Colors.green.shade700),
-                ),
-              ],
-            ),
+            onPressed: () => Navigator.pop(context),
+            child: Text(l10n.ok),
           ),
         ],
       ),
-    ) ?? false;
+    );
+
+    return false;
   }
 
   Future<void> _handleSend() async {
     final l10n = AppLocalizations.of(context)!;
     if (containerHarbor == null) return;
-    
+
     _container1FocusNode.unfocus();
     _container2FocusNode.unfocus();
     _descriptionFocusNode.unfocus();
 
     // Check for missing information
     List<String> warnings = [];
-    
+
     // Check seal 1
     if (containerHarbor!.seal1.sealNumber1.isEmpty) {
       warnings.add(l10n.warningSealMissingText1);
@@ -332,7 +287,7 @@ class _SealTaskState extends State<SealTask> {
     if (containerHarbor!.seal1.imagePath == null) {
       warnings.add(l10n.warningSealMissingImage1);
     }
-    
+
     // Check seal 2 (only if container 2 exists)
     if (widget.task.containerCode2 != null) {
       if (containerHarbor!.seal2.sealNumber1.isEmpty) {
@@ -707,7 +662,7 @@ class _SealTaskState extends State<SealTask> {
               if (containerHarbor != null) ...[
                 Container(
                   margin: const EdgeInsets.only(top: 16),
-                  height: MediaQuery.of(context).size.height * 0.5,
+                  height: MediaQuery.of(context).size.height * 0.55,
                   child: PageView(
                     controller: _pageController,
                     children: [
@@ -715,6 +670,7 @@ class _SealTaskState extends State<SealTask> {
                         key: const ValueKey('container1'),
                         index: 1,
                         containerCode: _container1Controller.text,
+                        syncSeal: widget.task.syncSeal1,
                         seal: containerHarbor!.seal1.copyWith(
                           cargoType: containerHarbor!.seal1.cargoType.isEmpty
                               ? widget.task.cargoType1
@@ -735,6 +691,7 @@ class _SealTaskState extends State<SealTask> {
                         key: const ValueKey('container2'),
                         index: 2,
                         containerCode: _container2Controller.text,
+                        syncSeal: widget.task.syncSeal2,
                         seal: containerHarbor!.seal2.copyWith(
                           cargoType: containerHarbor!.seal2.cargoType.isEmpty
                               ? widget.task.cargoType2

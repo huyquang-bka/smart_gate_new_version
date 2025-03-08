@@ -58,7 +58,7 @@ class TaskProvider extends ChangeNotifier {
 
               // Handle check seal message
               if (message.topic == AppConstants.mqttTopicCheckSeal) {
-                _handleContainerGateMessage(data);
+                _handleGateMessage(data);
                 continue;
               }
 
@@ -93,9 +93,11 @@ class TaskProvider extends ChangeNotifier {
 
     // Only update if cargo types are null or in default list
     final shouldUpdateCargoType1 =
-        AppConstants.defaultCargoTypeCode.contains(data['cargoType1']);
+        AppConstants.defaultCargoTypeCode.contains(data['cargoType1']) ||
+            data['seal1'] != null;
     final shouldUpdateCargoType2 =
-        AppConstants.defaultCargoTypeCode.contains(data['cargoType2']);
+        AppConstants.defaultCargoTypeCode.contains(data['cargoType2']) ||
+            data['seal2'] != null;
     if (!shouldUpdateCargoType1 && !shouldUpdateCargoType2) {
       return;
     }
@@ -103,7 +105,7 @@ class TaskProvider extends ChangeNotifier {
         _tasks.indexWhere((t) => t.checkPointId == checkPointId);
     if (existingIndex != -1) {
       final task = _tasks[existingIndex];
-
+      print("Message from cargo type: $data");
       _tasks[existingIndex] = task.copyWith(
         cargoType1: shouldUpdateCargoType1
             ? data['cargoType1'] as String?
@@ -111,12 +113,15 @@ class TaskProvider extends ChangeNotifier {
         cargoType2: shouldUpdateCargoType2
             ? data['cargoType2'] as String?
             : task.cargoType2,
+        syncSeal1: data['seal1'] as String?,
+        syncSeal2: data['seal2'] as String?,
       );
+      print("Task after update cargo type: ${task.toJson()}");
       notifyListeners();
     }
   }
 
-  void _handleContainerGateMessage(Map<String, dynamic> data) async {
+  void _handleGateMessage(Map<String, dynamic> data) async {
     try {
       print("ContainerGateMessage: $data");
       final selectedCheckpointIds =
@@ -127,6 +132,8 @@ class TaskProvider extends ChangeNotifier {
         'ContainerCode1': data['ContainerCode1'] as String?,
         'ContainerCode2': data['ContainerCode2'] as String?,
         'TimeInOut': data['TimeInOut'] as String,
+        'syncSeal1': data['Seal1'] as String?,
+        'syncSeal2': data['Seal2'] as String?,
         'cargoType1': 'GP', // Default cargo type
         'cargoType2': 'GP', // Default cargo type
       });

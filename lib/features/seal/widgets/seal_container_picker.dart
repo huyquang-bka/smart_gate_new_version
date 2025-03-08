@@ -1,6 +1,7 @@
 import 'package:smart_gate_new_version/features/seal/domain/models/seal.dart';
 import 'package:smart_gate_new_version/features/seal/widgets/image_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SealContainerPicker extends StatelessWidget {
   final int index;
@@ -8,6 +9,7 @@ class SealContainerPicker extends StatelessWidget {
   final Seal seal;
   final Function(Seal) onSealChanged;
   final Function() onEditContainer;
+  final String? syncSeal;
 
   const SealContainerPicker({
     super.key,
@@ -16,10 +18,12 @@ class SealContainerPicker extends StatelessWidget {
     required this.seal,
     required this.onSealChanged,
     required this.onEditContainer,
+    this.syncSeal,
   });
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     Seal currentSeal = seal;
     return Column(
       children: [
@@ -31,28 +35,53 @@ class SealContainerPicker extends StatelessWidget {
             borderRadius: BorderRadius.circular(10),
             color: Colors.grey.withOpacity(0.5),
           ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+          child: Column(
             children: [
-              Text(
-                containerCode.toUpperCase(),
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
-              ),
-              IconButton(
-                onPressed: onEditContainer,
-                icon: const Icon(
-                  Icons.edit,
-                  color: Colors.black,
-                  size: 20,
-                ),
-                padding: EdgeInsets.zero,
-                constraints: const BoxConstraints(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    containerCode.toUpperCase(),
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: onEditContainer,
+                    icon: const Icon(
+                      Icons.edit,
+                      color: Colors.black,
+                      size: 20,
+                    ),
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                  ),
+                ],
               ),
             ],
+          ),
+        ),
+        const SizedBox(height: 10),
+        // Sync seal
+        Container(
+          width: double.infinity,
+          margin: const EdgeInsets.symmetric(horizontal: 16),
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.black),
+            borderRadius: BorderRadius.circular(10),
+            color: Colors.orange.withOpacity(0.4),
+          ),
+          child: Text(
+            l10n.syncSealLabel(syncSeal ?? '?'),
+            style: const TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+            ),
+            textAlign: TextAlign.center,
           ),
         ),
         // Seal image

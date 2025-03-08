@@ -456,5 +456,12 @@
   "continueAnyway": "Continue Anyway",
   "goBack": "Go Back",
   "tasksDone": "Tasks Done",
-  "noCompletedTasks": "No completed tasks"
+  "noCompletedTasks": "No completed tasks",
+
+  "syncSealLabel": "Sync Seal: {seal}",
+  "@syncSealLabel": {
+    "placeholders": {
+      "seal": {}
+    }
+  }
 } 

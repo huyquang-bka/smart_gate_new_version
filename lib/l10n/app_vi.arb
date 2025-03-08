@@ -247,5 +247,14 @@
   "goBack": "Quay Lại",
 
   "tasksDone": "Nhiệm vụ đã hoàn thành",
-  "noCompletedTasks": "Chưa có nhiệm vụ hoàn thành"
-} 
+  "noCompletedTasks": "Chưa có nhiệm vụ hoàn thành",
+
+  "syncSealLabel": "Seal đồng bộ: {seal}",
+  "@syncSealLabel": {
+    "placeholders": {
+      "seal": {
+        "type": "Object"
+      }
+    }
+  } 
+}

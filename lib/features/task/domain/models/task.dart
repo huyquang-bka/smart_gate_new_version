@@ -11,6 +11,8 @@ class Task {
   final bool isCompleted;
   final String cargoType1;
   final String cargoType2;
+  final String? syncSeal1;
+  final String? syncSeal2;
 
   const Task({
     required this.eventId,
@@ -22,8 +24,12 @@ class Task {
     this.isCompleted = false,
     String? cargoType1,
     String? cargoType2,
+    String? syncSeal1,
+    String? syncSeal2,
   })  : cargoType1 = cargoType1 ?? 'GP',
-        cargoType2 = cargoType2 ?? 'GP';
+        cargoType2 = cargoType2 ?? 'GP',
+        syncSeal1 = syncSeal1 ?? '',
+        syncSeal2 = syncSeal2 ?? '';
 
   factory Task.fromJson(Map<String, dynamic> json) {
     final containerCode1 = json['ContainerCode1'] as String?;
@@ -47,6 +53,8 @@ class Task {
       isCompleted: false,
       cargoType1: json['cargoType1'] as String? ?? 'GP',
       cargoType2: json['cargoType2'] as String? ?? 'GP',
+      syncSeal1: json['syncSeal1'] as String? ?? '',
+      syncSeal2: json['syncSeal2'] as String? ?? '',
     );
   }
 
@@ -61,6 +69,8 @@ class Task {
       'isCompleted': isCompleted,
       'cargoType1': cargoType1,
       'cargoType2': cargoType2,
+      'syncSeal1': syncSeal1,
+      'syncSeal2': syncSeal2,
     };
   }
 
@@ -74,6 +84,8 @@ class Task {
     bool? isCompleted,
     String? cargoType1,
     String? cargoType2,
+    String? syncSeal1,
+    String? syncSeal2,
   }) {
     return Task(
       eventId: eventId ?? this.eventId,
@@ -85,6 +97,8 @@ class Task {
       isCompleted: isCompleted ?? this.isCompleted,
       cargoType1: cargoType1 ?? this.cargoType1,
       cargoType2: cargoType2 ?? this.cargoType2,
+      syncSeal1: syncSeal1 ?? this.syncSeal1,
+      syncSeal2: syncSeal2 ?? this.syncSeal2,
     );
   }
 }
