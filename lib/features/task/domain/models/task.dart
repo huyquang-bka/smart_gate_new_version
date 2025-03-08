@@ -38,8 +38,9 @@ class Task {
     return Task(
       eventId: json['EventId'] as String,
       checkPointId: json['CheckPointId'] as int,
-      compId: json['CompId'] as int ?? 0,
-      containerCode1: containerCode1?.isNotEmpty == true ? containerCode1 : null,
+      compId: (json['CompId'] as int?) ?? 0,
+      containerCode1:
+          containerCode1?.isNotEmpty == true ? containerCode1 : null,
       containerCode2:
           containerCode2?.isNotEmpty == true ? containerCode2 : null,
       timeInOut: DateTime.parse(json['TimeInOut'] as String),

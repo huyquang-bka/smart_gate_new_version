@@ -20,15 +20,35 @@ class ContainerHarbor {
         additionalImages = additionalImages ?? [];
 
   Map<String, dynamic> toJson() {
-    return {
-      "CheckPointId": int.parse(checkPointId),
-      "USERID": int.parse(userID),
-      "FULLNAME": fullName,
-      "SEAL1": seal1.toJson(),
-      "SEAL2": seal2.toJson(),
-      "DESCRIPTION": description,
-      "ADDITIONIMAGES": additionalImages,
+    final Map<String, dynamic> data = {
+      'CheckPointId': int.tryParse(checkPointId) ?? 0,
+      'USERID': int.tryParse(userID) ?? 0,
+      'FULLNAME': fullName,
+      'DESCRIPTION': description,
     };
+
+    // Add seal1 data if it exists
+    final seal1Json = seal1.toJson();
+    if (seal1Json != null) {
+      data['SEAL1'] = seal1Json;
+    } else {
+      data['SEAL1'] = null;
+    }
+
+    // Add seal2 data if it exists
+    final seal2Json = seal2.toJson();
+    if (seal2Json != null) {
+      data['SEAL2'] = seal2Json;
+    } else {
+      data['SEAL2'] = null;
+    }
+
+    // Only include additional images that exist
+    if (additionalImages.isNotEmpty) {
+      data['ADDITIONIMAGES'] = additionalImages;
+    }
+
+    return data;
   }
 
   ContainerHarbor copyWith({
@@ -51,10 +71,14 @@ class ContainerHarbor {
       ..seal1.sealNumber1 = seal1?.sealNumber1 ?? this.seal1.sealNumber1
       ..seal1.sealNumber2 = seal1?.sealNumber2 ?? this.seal1.sealNumber2
       ..seal1.cargoType = seal1?.cargoType ?? this.seal1.cargoType
+      ..seal1.savedImagePath =
+          seal1?.savedImagePath ?? this.seal1.savedImagePath
       ..seal2.imagePath = seal2?.imagePath ?? this.seal2.imagePath
       ..seal2.sealNumber1 = seal2?.sealNumber1 ?? this.seal2.sealNumber1
       ..seal2.sealNumber2 = seal2?.sealNumber2 ?? this.seal2.sealNumber2
-      ..seal2.cargoType = seal2?.cargoType ?? this.seal2.cargoType;
+      ..seal2.cargoType = seal2?.cargoType ?? this.seal2.cargoType
+      ..seal2.savedImagePath =
+          seal2?.savedImagePath ?? this.seal2.savedImagePath;
   }
 
   bool get isComplete {

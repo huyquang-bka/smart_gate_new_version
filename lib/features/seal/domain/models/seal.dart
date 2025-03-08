@@ -12,11 +12,16 @@ class Seal {
     this.cargoType = '',
   });
 
+  void clearImage() {
+    imagePath = null;
+    savedImagePath = '';
+  }
+
   Map<String, dynamic>? toJson() {
     print("-----------Seal: $sealNumber1 $sealNumber2 $cargoType");
     String sealNumber =
         sealNumber1 + (sealNumber2.isNotEmpty ? "/$sealNumber2" : '');
-    if (sealNumber.isEmpty || savedImagePath.isEmpty) {
+    if (sealNumber.isEmpty || (imagePath == null && savedImagePath.isEmpty)) {
       return null;
     }
     return {

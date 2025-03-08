@@ -18,6 +18,7 @@ class ImagePickerWidget extends StatefulWidget {
   final Function(String) onSeal1NumberChanged;
   final Function(String) onSeal2NumberChanged;
   final Function(String) onCargoTypeChanged;
+  final Function()? onImageCleared;
 
   const ImagePickerWidget({
     super.key,
@@ -30,6 +31,7 @@ class ImagePickerWidget extends StatefulWidget {
     required this.onSeal1NumberChanged,
     required this.onSeal2NumberChanged,
     required this.onCargoTypeChanged,
+    this.onImageCleared,
   });
 
   @override
@@ -249,6 +251,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
                                     widget.onImageChanged(null);
                                     widget.onSeal1NumberChanged('');
                                     widget.onSeal2NumberChanged('');
+                                    widget.onImageCleared?.call();
                                   },
                                 ),
                               ),
