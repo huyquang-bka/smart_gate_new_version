@@ -1,7 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
-
 import 'package:smart_gate_new_version/features/seal/domain/models/check_point.dart';
 
 class CheckpointService {

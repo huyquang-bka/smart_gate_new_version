@@ -49,7 +49,7 @@ class TaskProvider extends ChangeNotifier {
                 recMess.payload.message);
             try {
               final data = json.decode(payload);
-
+              print("Data from mqtt: $data");
               // Handle cargo type message
               if (message.topic == AppConstants.mqttTopicCargoType) {
                 _handleCargoTypeMessage(data);
@@ -127,13 +127,13 @@ class TaskProvider extends ChangeNotifier {
       final selectedCheckpointIds =
           await CheckpointService.getSelectedCheckpointIds();
       final task = Task.fromJson({
-        'EventId': data['EventId'] as String,
-        'CheckPointId': data['CheckPointId'] as int,
-        'ContainerCode1': data['ContainerCode1'] as String?,
-        'ContainerCode2': data['ContainerCode2'] as String?,
-        'TimeInOut': data['TimeInOut'] as String,
-        'syncSeal1': data['Seal1'] as String?,
-        'syncSeal2': data['Seal2'] as String?,
+        'EventId': data['eventId'] as String,
+        'CheckPointId': data['checkPointId'] as int,
+        'ContainerCode1': data['containerCode1'] as String?,
+        'ContainerCode2': data['containerCode2'] as String?,
+        'TimeInOut': data['timeInOut'] as String,
+        'syncSeal1': "",
+        'syncSeal2': "",
         'cargoType1': 'GP', // Default cargo type
         'cargoType2': 'GP', // Default cargo type
       });
