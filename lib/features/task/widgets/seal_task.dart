@@ -38,12 +38,10 @@ class _SealTaskState extends State<SealTask> {
 
   late final TextEditingController _container1Controller;
   late final TextEditingController _container2Controller;
-  late final TextEditingController _descriptionController;
   late final PageController _pageController;
 
   final FocusNode _container1FocusNode = FocusNode();
   final FocusNode _container2FocusNode = FocusNode();
-  final FocusNode _descriptionFocusNode = FocusNode();
 
   @override
   void initState() {
@@ -57,7 +55,6 @@ class _SealTaskState extends State<SealTask> {
         TextEditingController(text: widget.task.containerCode1);
     _container2Controller =
         TextEditingController(text: widget.task.containerCode2 ?? "?");
-    _descriptionController = TextEditingController();
     _pageController = PageController();
   }
 
@@ -65,11 +62,9 @@ class _SealTaskState extends State<SealTask> {
   void dispose() {
     _container1Controller.dispose();
     _container2Controller.dispose();
-    _descriptionController.dispose();
     _pageController.dispose();
     _container1FocusNode.dispose();
     _container2FocusNode.dispose();
-    _descriptionFocusNode.dispose();
     super.dispose();
   }
 
@@ -275,7 +270,6 @@ class _SealTaskState extends State<SealTask> {
 
     _container1FocusNode.unfocus();
     _container2FocusNode.unfocus();
-    _descriptionFocusNode.unfocus();
 
     // Check for missing information
     List<String> warnings = [];
@@ -408,8 +402,6 @@ class _SealTaskState extends State<SealTask> {
 
   void _updateContainerHarborData() {
     if (containerHarbor == null) return;
-
-    containerHarbor!.description = _descriptionController.text;
   }
 
   Future<void> _sendDataViaMqtt() async {
@@ -527,7 +519,6 @@ class _SealTaskState extends State<SealTask> {
           const SizedBox(height: 16),
           _buildImageList(),
           const SizedBox(height: 16),
-          _buildDescriptionField(l10n),
         ],
       ),
     );
@@ -616,18 +607,7 @@ class _SealTaskState extends State<SealTask> {
     );
   }
 
-  Widget _buildDescriptionField(AppLocalizations l10n) {
-    return TextField(
-      controller: _descriptionController,
-      focusNode: _descriptionFocusNode,
-      decoration: InputDecoration(
-        labelText: l10n.description,
-        border: const OutlineInputBorder(),
-      ),
-      maxLines: 3,
-    );
-  }
-
+  
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -640,7 +620,6 @@ class _SealTaskState extends State<SealTask> {
       onTap: () {
         _container1FocusNode.unfocus();
         _container2FocusNode.unfocus();
-        _descriptionFocusNode.unfocus();
       },
       child: Scaffold(
         appBar: AppBar(
@@ -662,7 +641,8 @@ class _SealTaskState extends State<SealTask> {
               if (containerHarbor != null) ...[
                 Container(
                   margin: const EdgeInsets.only(top: 16),
-                  height: MediaQuery.of(context).size.height * 0.55,
+                  height: MediaQuery.of(context).size.height *
+                      AppConstants.imagePickerHeight,
                   child: PageView(
                     controller: _pageController,
                     children: [
@@ -704,7 +684,7 @@ class _SealTaskState extends State<SealTask> {
                                   containerHarbor!.copyWith(seal2: updatedSeal);
                             });
                           });
-                        },
+                        },                        
                         onEditContainer: () =>
                             _editContainerCode(context, false),
                       ),

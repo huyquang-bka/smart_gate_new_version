@@ -24,7 +24,6 @@ class SealContainerPicker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    Seal currentSeal = seal;
     return Column(
       children: [
         // Container code
@@ -91,21 +90,26 @@ class SealContainerPicker extends StatelessWidget {
           seal1Number: seal.sealNumber1,
           seal2Number: seal.sealNumber2,
           cargoType: seal.cargoType,
+          description: seal.description,
           onImageChanged: (path) {
-            currentSeal.imagePath = path;
-            onSealChanged(currentSeal);
+            final updatedSeal = seal.copyWith(imagePath: path);
+            onSealChanged(updatedSeal);
           },
           onSeal1NumberChanged: (number) {
-            currentSeal.sealNumber1 = number;
-            onSealChanged(currentSeal);
+            final updatedSeal = seal.copyWith(sealNumber1: number);
+            onSealChanged(updatedSeal);
           },
           onSeal2NumberChanged: (number) {
-            currentSeal.sealNumber2 = number;
-            onSealChanged(currentSeal);
+            final updatedSeal = seal.copyWith(sealNumber2: number);
+            onSealChanged(updatedSeal);
           },
           onCargoTypeChanged: (cargoType) {
-            currentSeal.cargoType = cargoType;
-            onSealChanged(currentSeal);
+            final updatedSeal = seal.copyWith(cargoType: cargoType);
+            onSealChanged(updatedSeal);
+          },
+          onDescriptionChanged: (description) {
+            final updatedSeal = seal.copyWith(description: description);
+            onSealChanged(updatedSeal);
           },
         ),
       ],
