@@ -14,10 +14,12 @@ class ImagePickerWidget extends StatefulWidget {
   final String seal1Number;
   final String seal2Number;
   final String cargoType;
+  final String description;
   final Function(String?) onImageChanged;
   final Function(String) onSeal1NumberChanged;
   final Function(String) onSeal2NumberChanged;
   final Function(String) onCargoTypeChanged;
+  final Function(String) onDescriptionChanged;
   final Function()? onImageCleared;
 
   const ImagePickerWidget({
@@ -27,10 +29,12 @@ class ImagePickerWidget extends StatefulWidget {
     required this.seal1Number,
     required this.seal2Number,
     required this.cargoType,
+    required this.description,
     required this.onImageChanged,
     required this.onSeal1NumberChanged,
     required this.onSeal2NumberChanged,
     required this.onCargoTypeChanged,
+    required this.onDescriptionChanged,
     this.onImageCleared,
   });
 
@@ -43,8 +47,10 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
   File? image;
   final TextEditingController _seal1Controller = TextEditingController();
   final TextEditingController _seal2Controller = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
   final FocusNode _seal1Focus = FocusNode();
   final FocusNode _seal2Focus = FocusNode();
+  final FocusNode _descriptionFocus = FocusNode();
   bool _isLoading = false;
 
   @override
@@ -52,6 +58,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
     super.initState();
     _seal1Controller.text = widget.seal1Number;
     _seal2Controller.text = widget.seal2Number;
+    _descriptionController.text = widget.description;
     if (widget.imagePath != null) {
       image = File(widget.imagePath!);
     }
@@ -75,14 +82,19 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
     if (widget.cargoType != oldWidget.cargoType) {
       widget.onCargoTypeChanged(widget.cargoType);
     }
+    if (widget.description != oldWidget.description) {
+      _descriptionController.text = widget.description;
+    }
   }
 
   @override
   void dispose() {
     _seal1Controller.dispose();
     _seal2Controller.dispose();
+    _descriptionController.dispose();
     _seal1Focus.dispose();
     _seal2Focus.dispose();
+    _descriptionFocus.dispose();
     super.dispose();
   }
 
@@ -321,6 +333,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
               ],
             ),
             const SizedBox(height: 8),
+            // Seal 1
             TextField(
               controller: _seal1Controller,
               focusNode: _seal1Focus,
@@ -332,6 +345,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
               onChanged: widget.onSeal1NumberChanged,
             ),
             const SizedBox(height: 8),
+            // Seal 2
             TextField(
               controller: _seal2Controller,
               focusNode: _seal2Focus,
@@ -341,6 +355,19 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
                 border: const OutlineInputBorder(),
               ),
               onChanged: widget.onSeal2NumberChanged,
+            ),
+            const SizedBox(height: 8),
+            // Description
+            TextField(
+              controller: _descriptionController,
+              focusNode: _descriptionFocus,
+              enabled: !_isLoading,
+              decoration: InputDecoration(
+                labelText: l10n.description,
+                border: const OutlineInputBorder(),
+              ),
+              maxLines: 2,
+              onChanged: widget.onDescriptionChanged,
             ),
           ],
         ),

@@ -6,14 +6,12 @@ class ContainerHarbor {
   final String fullName;
   Seal seal1;
   Seal seal2;
-  String description;
   List<String> additionalImages;
 
   ContainerHarbor({
     required this.checkPointId,
     required this.userID,
     required this.fullName,
-    this.description = '',
     List<String>? additionalImages,
   })  : seal1 = Seal(),
         seal2 = Seal(),
@@ -24,7 +22,6 @@ class ContainerHarbor {
       'CheckPointId': int.tryParse(checkPointId) ?? 0,
       'USERID': int.tryParse(userID) ?? 0,
       'FULLNAME': fullName,
-      'DESCRIPTION': description,
     };
 
     // Add seal1 data if it exists
@@ -47,6 +44,7 @@ class ContainerHarbor {
     if (additionalImages.isNotEmpty) {
       data['ADDITIONIMAGES'] = additionalImages;
     }
+    data["DESCRIPTION"] = null;
 
     return data;
   }
@@ -57,26 +55,26 @@ class ContainerHarbor {
     String? fullName,
     Seal? seal1,
     Seal? seal2,
-    String? description,
     List<String>? additionalImages,
   }) {
     return ContainerHarbor(
       checkPointId: checkPointId ?? this.checkPointId,
       userID: userID ?? this.userID,
       fullName: fullName ?? this.fullName,
-      description: description ?? this.description,
       additionalImages: additionalImages ?? this.additionalImages,
     )
       ..seal1.imagePath = seal1?.imagePath ?? this.seal1.imagePath
       ..seal1.sealNumber1 = seal1?.sealNumber1 ?? this.seal1.sealNumber1
       ..seal1.sealNumber2 = seal1?.sealNumber2 ?? this.seal1.sealNumber2
       ..seal1.cargoType = seal1?.cargoType ?? this.seal1.cargoType
+      ..seal1.description = seal1?.description ?? this.seal1.description
       ..seal1.savedImagePath =
           seal1?.savedImagePath ?? this.seal1.savedImagePath
       ..seal2.imagePath = seal2?.imagePath ?? this.seal2.imagePath
       ..seal2.sealNumber1 = seal2?.sealNumber1 ?? this.seal2.sealNumber1
       ..seal2.sealNumber2 = seal2?.sealNumber2 ?? this.seal2.sealNumber2
       ..seal2.cargoType = seal2?.cargoType ?? this.seal2.cargoType
+      ..seal2.description = seal2?.description ?? this.seal2.description
       ..seal2.savedImagePath =
           seal2?.savedImagePath ?? this.seal2.savedImagePath;
   }
@@ -87,6 +85,6 @@ class ContainerHarbor {
 
   @override
   String toString() {
-    return "ContainerHarbor: $checkPointId $userID $fullName $seal1 $seal2 $description $additionalImages";
+    return "ContainerHarbor: $checkPointId $userID $fullName $seal1 $seal2 $additionalImages";
   }
 }

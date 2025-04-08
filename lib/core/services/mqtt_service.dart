@@ -68,7 +68,7 @@ class MqttService {
     print('Connected');
     _isConnected = true;
     _connectionController.add(true);
-    
+
     // Subscribe to all required topics
     final topics = [
       AppConstants.mqttTopicEvent,
@@ -79,7 +79,7 @@ class MqttService {
     for (var topic in topics) {
       client.subscribe(topic, MqttQos.atLeastOnce);
     }
-    
+
     _stopReconnectTimer();
   }
 
@@ -115,9 +115,10 @@ class MqttService {
       throw Exception('MQTT client is not connected');
     }
     final messageEncode = jsonEncode(message);
-
+    final base64Message = base64Encode(utf8.encode(messageEncode));
+    print('Sending message: $base64Message');
     final builder = MqttClientPayloadBuilder();
-    builder.addString(messageEncode);
+    builder.addString(base64Message);
     client.publishMessage(topic, MqttQos.atLeastOnce, builder.payload!);
   }
 

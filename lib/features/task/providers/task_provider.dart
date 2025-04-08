@@ -139,18 +139,39 @@ class TaskProvider extends ChangeNotifier {
       });
       print("Task checkPointId: ${task.checkPointId}");
       print("Selected checkpoint ids: $selectedCheckpointIds");
-      if (selectedCheckpointIds.contains(task.checkPointId.toString())) {
-        final existingIndex =
-            _tasks.indexWhere((t) => t.checkPointId == task.checkPointId);
 
-        if (existingIndex != -1) {
-          if (task.timeInOut.isAfter(_tasks[existingIndex].timeInOut)) {
-            _tasks[existingIndex] = task;
+
+
+
+
+
+
+
+
+
+      if (selectedCheckpointIds.contains(task.checkPointId.toString())) {
+        // Check for existing task with the same eventId
+        final existingEventIndex = 
+            _tasks.indexWhere((t) => t.eventId == task.eventId);
+        
+        if (existingEventIndex != -1) {
+          // Update existing task with same eventId without checking time
+          _tasks[existingEventIndex] = task;
+          notifyListeners();
+        } else {
+          // Check for existing task with same checkpoint
+          final existingIndex =
+              _tasks.indexWhere((t) => t.checkPointId == task.checkPointId);
+
+          if (existingIndex != -1) {
+            if (task.timeInOut.isAfter(_tasks[existingIndex].timeInOut)) {
+              _tasks[existingIndex] = task;
+              notifyListeners();
+            }
+          } else {
+            _tasks.insert(0, task);
             notifyListeners();
           }
-        } else {
-          _tasks.insert(0, task);
-          notifyListeners();
         }
       }
     } catch (e) {
@@ -183,17 +204,28 @@ class TaskProvider extends ChangeNotifier {
       }
 
       if (selectedCheckpointIds.contains(task.checkPointId.toString())) {
-        final existingIndex =
-            _tasks.indexWhere((t) => t.checkPointId == task.checkPointId);
+        // Check for existing task with the same eventId
+        final existingEventIndex = 
+            _tasks.indexWhere((t) => t.eventId == task.eventId);
+        
+        if (existingEventIndex != -1) {
+          // Update existing task with same eventId without checking time
+          _tasks[existingEventIndex] = task;
+          notifyListeners();
+        } else {
+          // Check for existing task with same checkpoint
+          final existingIndex =
+              _tasks.indexWhere((t) => t.checkPointId == task.checkPointId);
 
-        if (existingIndex != -1) {
-          if (task.timeInOut.isAfter(_tasks[existingIndex].timeInOut)) {
-            _tasks[existingIndex] = task;
+          if (existingIndex != -1) {
+            if (task.timeInOut.isAfter(_tasks[existingIndex].timeInOut)) {
+              _tasks[existingIndex] = task;
+              notifyListeners();
+            }
+          } else {
+            _tasks.insert(0, task);
             notifyListeners();
           }
-        } else {
-          _tasks.insert(0, task);
-          notifyListeners();
         }
       }
     } catch (e) {
