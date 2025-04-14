@@ -34,12 +34,12 @@ class AppConstants {
   // static const String mqttBroker = '27.72.98.49';
   // static const int mqttPort = 58883;
   static const int mqttPort = 1883;
-  static const String mqttBroker = '172.34.64.10';
+  static const String mqttBroker = '172.34.64.16';
   static const String mqttTopicEvent = "Event/Container";
   static const String mqttTopicCargoType = "Event/CargoType";
   static const String mqttTopicCheckSeal = "Event/CheckSeal";
-  static const String mqttUsername = 'admin';
-  static const String mqttPassword = 'admin';
+  static const String mqttUsername = 'htit';
+  static const String mqttPassword = 'Ht!t@2025';
 
   // Dimensions
   static const double defaultPadding = 16.0;

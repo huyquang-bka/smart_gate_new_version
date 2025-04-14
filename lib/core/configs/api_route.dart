@@ -2,7 +2,7 @@ class ApiRoute {
   // Base URLs
   // static const String baseUrl = "https://crd.atin.vn";
   // static const String aiServiceUrl = "http://27.72.98.49:6299";
-  static const String baseUrl = "http://172.34.64.10:42001";
+  static const String baseUrl = "http://172.34.64.16:42002";
   static const String aiServiceUrl = "http://172.34.64.11:6299";
 }
 
