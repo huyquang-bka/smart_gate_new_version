@@ -2,7 +2,7 @@ class ApiRoute {
   // Base URLs
   // static const String baseUrl = "https://crd.atin.vn";
   // static const String aiServiceUrl = "http://27.72.98.49:6299";
-  static const String baseUrl = "http://172.34.64.16:42002";
+  static const String baseUrl = "http://172.34.64.17:8000";
   static const String aiServiceUrl = "http://172.34.64.11:6299";
 }
 
@@ -25,24 +25,20 @@ class AuthBody {
   static Map<String, String> login({
     required String username,
     required String password,
-  }) =>
-      {
-        "grant_type": "password",
-        "client_id": "EPS",
-        "client_secret": "b0udcdl8k80cqiyt63uq",
-        "username": username,
-        "password": password,
-      };
+  }) => {
+    "grant_type": "password",
+    "client_id": "EPS",
+    "client_secret": "b0udcdl8k80cqiyt63uq",
+    "username": username,
+    "password": password,
+  };
 
-  static Map<String, String> refreshToken({
-    required String refreshToken,
-  }) =>
-      {
-        "grant_type": "refresh_token",
-        "client_id": "EPS",
-        "client_secret": "b0udcdl8k80cqiyt63uq",
-        "refresh_token": refreshToken,
-      };
+  static Map<String, String> refreshToken({required String refreshToken}) => {
+    "grant_type": "refresh_token",
+    "client_id": "EPS",
+    "client_secret": "b0udcdl8k80cqiyt63uq",
+    "refresh_token": refreshToken,
+  };
 }
 
 // Full URLs
