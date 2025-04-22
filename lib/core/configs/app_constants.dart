@@ -38,8 +38,8 @@ class AppConstants {
   static const String mqttTopicEvent = "Event/Container";
   static const String mqttTopicCargoType = "Event/CargoType";
   static const String mqttTopicCheckSeal = "Event/CheckSeal";
-  static const String mqttUsername = 'admin';
-  static const String mqttPassword = 'admin';
+  static const String mqttUsername = 'htit';
+  static const String mqttPassword = 'Admin@Ht!t@2025';
 
   // Dimensions
   static const double defaultPadding = 16.0;
