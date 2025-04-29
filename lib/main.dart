@@ -20,6 +20,7 @@ void main() {
       providers: [
         ChangeNotifierProvider(create: (_) => LanguageProvider()),
         ChangeNotifierProvider(create: (_) => TaskProvider()),
+        Provider<MqttService>(create: (_) => mqttService),
       ],
       child: const MyApp(),
     ),

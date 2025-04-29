@@ -144,6 +144,7 @@
 
   "@_MQTT": {},
   "mqttConnected": "MQTT Connected",
+  "mqttDisconnected": "MQTT Disconnected",
   "mqttConnectionError": "Error connecting to MQTT: {error}",
   "@mqttConnectionError": {
     "placeholders": {
@@ -152,6 +153,11 @@
   },
   "readyToSend": "Ready to send data",
   "sendingMqtt": "Sending MQTT message",
+  "mqttConnectionDetails": "MQTT Connection Details",
+  "mqttBroker": "Broker",
+  "mqttPort": "Port",
+  "mqttStatus": "Status",
+  "mqttClientId": "Client ID",
 
   "@_SEAL_VALIDATION": {},
   "noCheckpoint": "No checkpoint selected",

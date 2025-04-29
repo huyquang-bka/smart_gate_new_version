@@ -6,6 +6,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:smart_gate_new_version/features/task/providers/task_provider.dart';
 import 'package:smart_gate_new_version/features/task/widgets/seal_task.dart';
 import 'package:smart_gate_new_version/core/services/checkpoint_service.dart';
+import 'package:smart_gate_new_version/features/task/widgets/mqtt_connection_status.dart';
 
 class TaskPage extends StatefulWidget {
   const TaskPage({super.key});
@@ -66,6 +67,12 @@ class _TaskPageState extends State<TaskPage> {
             title: Text(l10n.tasks),
             centerTitle: true,
             automaticallyImplyLeading: false,
+            actions: [
+              Padding(
+                padding: EdgeInsets.only(right: 16),
+                child: MqttConnectionStatus(),
+              ),
+            ],
           ),
           body: sortedTasks.isEmpty
               ? Center(child: Text(l10n.noTasks))

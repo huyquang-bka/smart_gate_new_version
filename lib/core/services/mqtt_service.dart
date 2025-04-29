@@ -15,6 +15,7 @@ class MqttService {
   // Add connection status stream controller
   final _connectionController = StreamController<bool>.broadcast();
   Stream<bool> get connectionStream => _connectionController.stream;
+  bool get isConnected => _isConnected;
 
   MqttService() {
     _initializeClient();

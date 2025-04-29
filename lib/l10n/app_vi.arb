@@ -91,9 +91,15 @@
 
   "@_MQTT": {},
   "mqttConnected": "Đã kết nối MQTT",
+  "mqttDisconnected": "Mất kết nối MQTT",
   "mqttConnectionError": "Lỗi kết nối MQTT: {error}",
   "readyToSend": "Sẵn sàng gửi dữ liệu",
   "sendingMqtt": "Đang gửi tin nhắn MQTT",
+  "mqttConnectionDetails": "Thông tin kết nối MQTT",
+  "mqttBroker": "Máy chủ",
+  "mqttPort": "Cổng",
+  "mqttStatus": "Trạng thái",
+  "mqttClientId": "ID máy khách",
 
   "@_SEAL_VALIDATION": {},
   "noCheckpoint": "Chưa chọn làn",
