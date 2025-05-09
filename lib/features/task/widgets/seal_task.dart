@@ -278,7 +278,8 @@ class _SealTaskState extends State<SealTask> {
     List<String> warnings = [];
 
     // Check seal 1 (only seal 1 exists)
-    if (widget.task.containerCode1 != null && widget.task.containerCode1!.isNotEmpty) {
+    if (widget.task.containerCode1 != null &&
+        widget.task.containerCode1!.isNotEmpty) {
       if (containerHarbor!.seal1.sealNumber1.isEmpty) {
         warnings.add(l10n.warningSealMissingText1);
       }
@@ -645,104 +646,109 @@ class _SealTaskState extends State<SealTask> {
             children: [
               if (containerHarbor != null) ...[
                 Container(
-                  margin: const EdgeInsets.only(top: 16),
-                  height: MediaQuery.of(context).size.height *
-                      AppConstants.imagePickerHeight,
-                  child: widget.task.containerCode2 == null ||
-                          widget.task.containerCode2!.isEmpty
-                      ? SealContainerPicker(
-                        key: const ValueKey('container1'),
-                        index: 1,
-                        containerCode: _container1Controller.text,
-                        syncSeal: widget.task.syncSeal1,
-                        seal: containerHarbor!.seal1.copyWith(
-                          cargoType: containerHarbor!.seal1.cargoType.isEmpty
-                              ? widget.task.cargoType1
-                              : containerHarbor!.seal1.cargoType,
-                        ),
-                        onSealChanged: (updatedSeal) {
-                          WidgetsBinding.instance.addPostFrameCallback((_) {
-                            setState(() {
-                              containerHarbor =
-                                  containerHarbor!.copyWith(seal1: updatedSeal);
-                            });
-                          });
-                        },
-                        onEditContainer: () =>
-                            _editContainerCode(context, true),
-                      ) 
-                      : widget.task.containerCode1 == null ||
-                          widget.task.containerCode1!.isEmpty
-                      ?  SealContainerPicker(
-                        key: const ValueKey('container2'),
-                        index: 2,
-                        containerCode: _container2Controller.text,
-                        syncSeal: widget.task.syncSeal2,
-                        seal: containerHarbor!.seal2.copyWith(
-                          cargoType: containerHarbor!.seal2.cargoType.isEmpty
-                              ? widget.task.cargoType2
-                              : containerHarbor!.seal2.cargoType,
-                        ),
-                        onSealChanged: (updatedSeal) {
-                          WidgetsBinding.instance.addPostFrameCallback((_) {
-                            setState(() {
-                              containerHarbor =
-                                  containerHarbor!.copyWith(seal2: updatedSeal);
-                            });
-                          });
-                        },
-                        onEditContainer: () =>
-                            _editContainerCode(context, false),
-                      )
-                      : PageView(
-                          controller: _pageController,
-                          children: [
-                            SealContainerPicker(
-                        key: const ValueKey('container1'),
-                        index: 1,
-                        containerCode: _container1Controller.text,
-                        syncSeal: widget.task.syncSeal1,
-                        seal: containerHarbor!.seal1.copyWith(
-                          cargoType: containerHarbor!.seal1.cargoType.isEmpty
-                              ? widget.task.cargoType1
-                              : containerHarbor!.seal1.cargoType,
-                        ),
-                        onSealChanged: (updatedSeal) {
-                          WidgetsBinding.instance.addPostFrameCallback((_) {
-                            setState(() {
-                              containerHarbor =
-                                  containerHarbor!.copyWith(seal1: updatedSeal);
-                            });
-                          });
-                        },
-                        onEditContainer: () =>
-                            _editContainerCode(context, true),
-                      ),
-                      SealContainerPicker(
-                        key: const ValueKey('container2'),
-                        index: 2,
-                        containerCode: _container2Controller.text,
-                        syncSeal: widget.task.syncSeal2,
-                        seal: containerHarbor!.seal2.copyWith(
-                          cargoType: containerHarbor!.seal2.cargoType.isEmpty
-                              ? widget.task.cargoType2
-                              : containerHarbor!.seal2.cargoType,
-                        ),
-                        onSealChanged: (updatedSeal) {
-                          WidgetsBinding.instance.addPostFrameCallback((_) {
-                            setState(() {
-                              containerHarbor =
-                                  containerHarbor!.copyWith(seal2: updatedSeal);
-                            });
-                          });
-                        },
-                        onEditContainer: () =>
-                            _editContainerCode(context, false),
-                      ),
-                          ],
-                        )
-                      
-                ),
+                    margin: const EdgeInsets.only(top: 16),
+                    height: MediaQuery.of(context).size.height *
+                        AppConstants.imagePickerHeight,
+                    child: widget.task.containerCode2 == null ||
+                            widget.task.containerCode2!.isEmpty
+                        ? SealContainerPicker(
+                            key: const ValueKey('container1'),
+                            index: 1,
+                            containerCode: _container1Controller.text,
+                            syncSeal: widget.task.syncSeal1,
+                            seal: containerHarbor!.seal1.copyWith(
+                              cargoType:
+                                  containerHarbor!.seal1.cargoType.isEmpty
+                                      ? widget.task.cargoType1
+                                      : containerHarbor!.seal1.cargoType,
+                            ),
+                            onSealChanged: (updatedSeal) {
+                              WidgetsBinding.instance.addPostFrameCallback((_) {
+                                setState(() {
+                                  containerHarbor = containerHarbor!
+                                      .copyWith(seal1: updatedSeal);
+                                });
+                              });
+                            },
+                            onEditContainer: () =>
+                                _editContainerCode(context, true),
+                          )
+                        : widget.task.containerCode1 == null ||
+                                widget.task.containerCode1!.isEmpty
+                            ? SealContainerPicker(
+                                key: const ValueKey('container2'),
+                                index: 2,
+                                containerCode: _container2Controller.text,
+                                syncSeal: widget.task.syncSeal2,
+                                seal: containerHarbor!.seal2.copyWith(
+                                  cargoType:
+                                      containerHarbor!.seal2.cargoType.isEmpty
+                                          ? widget.task.cargoType2
+                                          : containerHarbor!.seal2.cargoType,
+                                ),
+                                onSealChanged: (updatedSeal) {
+                                  WidgetsBinding.instance
+                                      .addPostFrameCallback((_) {
+                                    setState(() {
+                                      containerHarbor = containerHarbor!
+                                          .copyWith(seal2: updatedSeal);
+                                    });
+                                  });
+                                },
+                                onEditContainer: () =>
+                                    _editContainerCode(context, false),
+                              )
+                            : PageView(
+                                controller: _pageController,
+                                children: [
+                                  SealContainerPicker(
+                                    key: const ValueKey('container1'),
+                                    index: 1,
+                                    containerCode: _container1Controller.text,
+                                    syncSeal: widget.task.syncSeal1,
+                                    seal: containerHarbor!.seal1.copyWith(
+                                      cargoType: containerHarbor!
+                                              .seal1.cargoType.isEmpty
+                                          ? widget.task.cargoType1
+                                          : containerHarbor!.seal1.cargoType,
+                                    ),
+                                    onSealChanged: (updatedSeal) {
+                                      WidgetsBinding.instance
+                                          .addPostFrameCallback((_) {
+                                        setState(() {
+                                          containerHarbor = containerHarbor!
+                                              .copyWith(seal1: updatedSeal);
+                                        });
+                                      });
+                                    },
+                                    onEditContainer: () =>
+                                        _editContainerCode(context, true),
+                                  ),
+                                  SealContainerPicker(
+                                    key: const ValueKey('container2'),
+                                    index: 2,
+                                    containerCode: _container2Controller.text,
+                                    syncSeal: widget.task.syncSeal2,
+                                    seal: containerHarbor!.seal2.copyWith(
+                                      cargoType: containerHarbor!
+                                              .seal2.cargoType.isEmpty
+                                          ? widget.task.cargoType2
+                                          : containerHarbor!.seal2.cargoType,
+                                    ),
+                                    onSealChanged: (updatedSeal) {
+                                      WidgetsBinding.instance
+                                          .addPostFrameCallback((_) {
+                                        setState(() {
+                                          containerHarbor = containerHarbor!
+                                              .copyWith(seal2: updatedSeal);
+                                        });
+                                      });
+                                    },
+                                    onEditContainer: () =>
+                                        _editContainerCode(context, false),
+                                  ),
+                                ],
+                              )),
               ],
               _buildAdditionalInfo(),
             ],

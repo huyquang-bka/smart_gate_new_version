@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:smart_gate_new_version/core/configs/api_route.dart';
 import 'package:smart_gate_new_version/core/services/auth_service.dart';
 import 'package:smart_gate_new_version/core/exceptions/session_expired_exception.dart';
+import 'package:smart_gate_new_version/core/exceptions/server_error_exception.dart';
 import 'dart:async';
 
 class CustomHttpClient {
@@ -21,12 +22,14 @@ class CustomHttpClient {
   Future<http.Response> get(String endpoint) async {
     await _initialization;
     final response = await _getRequestWithToken(endpoint);
-    if (response.statusCode == 401 || response.statusCode == 500) {
+    if (response.statusCode == 401) {
       final refreshSuccess = await _refreshToken();
       if (refreshSuccess) {
         return _getRequestWithToken(endpoint);
       }
-      throw SessionExpiredException();
+      throw SessionExpiredException('Session expired');
+    } else if (response.statusCode == 500) {
+      throw ServerErrorException('Server error occurred');
     }
     return response;
   }
@@ -34,12 +37,14 @@ class CustomHttpClient {
   Future<http.Response> post(String endpoint, Map<String, dynamic> body) async {
     await _initialization;
     final response = await _postRequestWithToken(endpoint, body);
-    if (response.statusCode == 401 || response.statusCode == 500) {
+    if (response.statusCode == 401) {
       final refreshSuccess = await _refreshToken();
       if (refreshSuccess) {
         return _postRequestWithToken(endpoint, body);
       }
-      throw SessionExpiredException();
+      throw SessionExpiredException('Session expired');
+    } else if (response.statusCode == 500) {
+      throw ServerErrorException('Server error occurred');
     }
     return response;
   }
@@ -64,7 +69,7 @@ class CustomHttpClient {
       },
     );
 
-    if (response.statusCode == 401 || response.statusCode == 500) {
+    if (response.statusCode == 401) {
       final refreshSuccess = await _refreshToken();
       if (refreshSuccess) {
         final newRequest = http.MultipartRequest(
@@ -85,7 +90,9 @@ class CustomHttpClient {
           },
         );
       }
-      throw SessionExpiredException();
+      throw SessionExpiredException('Session expired');
+    } else if (response.statusCode == 500) {
+      throw ServerErrorException('Server error occurred');
     }
 
     return response;
@@ -141,6 +148,8 @@ class CustomHttpClient {
         );
         await AuthService.saveAuth(_auth!);
         return true;
+      } else if (response.statusCode == 500) {
+        throw ServerErrorException('Server error during token refresh');
       }
     } catch (e) {
       print('Refresh token error: $e');
@@ -175,6 +184,8 @@ class CustomHttpClient {
           compId: body['comId'] ?? -1,
         );
         await AuthService.saveAuth(_auth!);
+      } else if (response.statusCode == 500) {
+        throw ServerErrorException('Server error during login');
       }
       return response.statusCode;
     } catch (e) {
