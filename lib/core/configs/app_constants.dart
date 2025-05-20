@@ -34,7 +34,7 @@ class AppConstants {
   // static const String mqttBroker = '27.72.98.49';
   // static const int mqttPort = 58883;
   static const int mqttPort = 1883;
-  static const String mqttBroker = '172.34.64.17';
+  static const String mqttBroker = '172.34.64.10';
   static const String mqttTopicEvent = "Event/Container";
   static const String mqttTopicCargoType = "Event/CargoType";
   static const String mqttTopicCheckSeal = "Event/CheckSeal";
