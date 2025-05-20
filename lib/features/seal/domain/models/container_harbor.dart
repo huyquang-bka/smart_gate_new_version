@@ -1,6 +1,7 @@
 import 'package:smart_gate_new_version/features/seal/domain/models/seal.dart';
 
 class ContainerHarbor {
+  final String eventId;
   final String checkPointId;
   final String userID;
   final String fullName;
@@ -9,6 +10,7 @@ class ContainerHarbor {
   List<String> additionalImages;
 
   ContainerHarbor({
+    required this.eventId,
     required this.checkPointId,
     required this.userID,
     required this.fullName,
@@ -19,6 +21,7 @@ class ContainerHarbor {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = {
+      'EVENTID': eventId,
       'CheckPointId': int.tryParse(checkPointId) ?? 0,
       'USERID': int.tryParse(userID) ?? 0,
       'FULLNAME': fullName,
@@ -50,6 +53,7 @@ class ContainerHarbor {
   }
 
   ContainerHarbor copyWith({
+    String? eventId,
     String? checkPointId,
     String? userID,
     String? fullName,
@@ -58,6 +62,7 @@ class ContainerHarbor {
     List<String>? additionalImages,
   }) {
     return ContainerHarbor(
+      eventId: eventId ?? this.eventId,
       checkPointId: checkPointId ?? this.checkPointId,
       userID: userID ?? this.userID,
       fullName: fullName ?? this.fullName,

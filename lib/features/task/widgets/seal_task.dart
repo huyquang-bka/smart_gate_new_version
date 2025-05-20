@@ -117,6 +117,7 @@ class _SealTaskState extends State<SealTask> {
     final auth = await AuthService.getAuth();
     setState(() {
       containerHarbor = ContainerHarbor(
+        eventId: widget.task.eventId,
         checkPointId: widget.task.checkPointId.toString(),
         userID: auth.userId.toString(),
         fullName: auth.fullName,

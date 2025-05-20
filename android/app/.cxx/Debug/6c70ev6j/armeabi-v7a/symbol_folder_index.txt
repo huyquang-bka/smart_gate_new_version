@@ -1,1 +1,0 @@
-/Users/huyquang/huyquang/flutter-app/smart_gate_new_version/build/app/intermediates/cxx/Debug/6c70ev6j/obj/armeabi-v7a

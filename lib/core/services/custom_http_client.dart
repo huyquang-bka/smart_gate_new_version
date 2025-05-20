@@ -20,6 +20,7 @@ class CustomHttpClient {
   }
 
   Future<http.Response> get(String endpoint) async {
+    print("Getting data from $endpoint");
     await _initialization;
     final response = await _getRequestWithToken(endpoint);
     if (response.statusCode == 401) {

@@ -2,7 +2,7 @@ class ApiRoute {
   // Base URLs
   // static const String baseUrl = "https://crd.atin.vn";
   // static const String aiServiceUrl = "http://27.72.98.49:6299";
-  static const String baseUrl = "http://172.34.64.10:42001";
+  static const String baseUrl = "http://172.34.64.17:42001";
   static const String aiServiceUrl = "http://172.34.64.11:6299";
 }
 
@@ -34,10 +34,7 @@ class AuthBody {
         "password": password,
       };
 
-  static Map<String, String> refreshToken({
-    required String refreshToken,
-  }) =>
-      {
+  static Map<String, String> refreshToken({required String refreshToken}) => {
         "grant_type": "refresh_token",
         "client_id": "EPS",
         "client_secret": "b0udcdl8k80cqiyt63uq",
