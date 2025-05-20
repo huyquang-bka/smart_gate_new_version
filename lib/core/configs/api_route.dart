@@ -25,20 +25,21 @@ class AuthBody {
   static Map<String, String> login({
     required String username,
     required String password,
-  }) => {
-    "grant_type": "password",
-    "client_id": "EPS",
-    "client_secret": "b0udcdl8k80cqiyt63uq",
-    "username": username,
-    "password": password,
-  };
+  }) =>
+      {
+        "grant_type": "password",
+        "client_id": "EPS",
+        "client_secret": "b0udcdl8k80cqiyt63uq",
+        "username": username,
+        "password": password,
+      };
 
   static Map<String, String> refreshToken({required String refreshToken}) => {
-    "grant_type": "refresh_token",
-    "client_id": "EPS",
-    "client_secret": "b0udcdl8k80cqiyt63uq",
-    "refresh_token": refreshToken,
-  };
+        "grant_type": "refresh_token",
+        "client_id": "EPS",
+        "client_secret": "b0udcdl8k80cqiyt63uq",
+        "refresh_token": refreshToken,
+      };
 }
 
 // Full URLs

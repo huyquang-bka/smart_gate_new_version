@@ -10,6 +10,7 @@ import 'package:smart_gate_new_version/features/task/domain/models/task.dart';
 
 class TaskProvider extends ChangeNotifier {
   final List<Task> _tasks = [];
+  final Set<String> _currentEventIds = {};
   StreamSubscription<List<MqttReceivedMessage<MqttMessage>>>? _mqttSubscription;
   StreamSubscription<bool>? _connectionSubscription;
   bool _isInitialized = false;
@@ -126,8 +127,15 @@ class TaskProvider extends ChangeNotifier {
       print("ContainerGateMessage: $data");
       final selectedCheckpointIds =
           await CheckpointService.getSelectedCheckpointIds();
+      final eventId = data['eventId'] as String;
+
+      // Skip if event ID is already being processed
+      if (_currentEventIds.contains(eventId)) {
+        return;
+      }
+
       final task = Task.fromJson({
-        'EventId': data['eventId'] as String,
+        'EventId': eventId,
         'CheckPointId': data['checkPointId'] as int,
         'ContainerCode1': data['containerCode1'] as String?,
         'ContainerCode2': data['containerCode2'] as String?,
@@ -140,20 +148,14 @@ class TaskProvider extends ChangeNotifier {
       print("Task checkPointId: ${task.checkPointId}");
       print("Selected checkpoint ids: $selectedCheckpointIds");
 
-
-
-
-
-
-
-
-
-
       if (selectedCheckpointIds.contains(task.checkPointId.toString())) {
+        // Add event ID to tracking set
+        _currentEventIds.add(eventId);
+
         // Check for existing task with the same eventId
-        final existingEventIndex = 
+        final existingEventIndex =
             _tasks.indexWhere((t) => t.eventId == task.eventId);
-        
+
         if (existingEventIndex != -1) {
           // Update existing task with same eventId without checking time
           _tasks[existingEventIndex] = task;
@@ -184,6 +186,13 @@ class TaskProvider extends ChangeNotifier {
       final selectedCheckpointIds =
           await CheckpointService.getSelectedCheckpointIds();
       final task = Task.fromJson(data);
+      final eventId = task.eventId;
+
+      // Skip if event ID is already being processed
+      if (_currentEventIds.contains(eventId)) {
+        return;
+      }
+
       final checkpoints = await CheckpointService.getAllCheckpoints();
 
       // Find the checkpoint for this task
@@ -204,10 +213,13 @@ class TaskProvider extends ChangeNotifier {
       }
 
       if (selectedCheckpointIds.contains(task.checkPointId.toString())) {
+        // Add event ID to tracking set
+        _currentEventIds.add(eventId);
+
         // Check for existing task with the same eventId
-        final existingEventIndex = 
+        final existingEventIndex =
             _tasks.indexWhere((t) => t.eventId == task.eventId);
-        
+
         if (existingEventIndex != -1) {
           // Update existing task with same eventId without checking time
           _tasks[existingEventIndex] = task;
@@ -235,6 +247,7 @@ class TaskProvider extends ChangeNotifier {
 
   void removeTask(Task task) {
     _tasks.remove(task);
+    _currentEventIds.remove(task.eventId);
     notifyListeners();
   }
 
@@ -242,6 +255,7 @@ class TaskProvider extends ChangeNotifier {
     final index = _tasks.indexWhere((t) => t.eventId == task.eventId);
     if (index != -1) {
       _tasks[index] = task.copyWith(isCompleted: true);
+      _currentEventIds.remove(task.eventId);
       notifyListeners();
     }
   }
