@@ -82,7 +82,7 @@ class _LoginPageState extends State<LoginPage> {
         _usernameController.text,
         _passwordController.text,
       );
-
+      print("Status code: $statusCode");
       if (!mounted) return;
       Navigator.pop(context); // Remove loading indicator
 

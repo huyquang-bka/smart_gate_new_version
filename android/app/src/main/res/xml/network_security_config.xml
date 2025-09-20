@@ -6,4 +6,8 @@
             <certificates src="user" />
         </trust-anchors>
     </base-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">172.34.64.10</domain>
+        <domain includeSubdomains="true">atin.com.vn</domain>
+    </domain-config>
 </network-security-config> 

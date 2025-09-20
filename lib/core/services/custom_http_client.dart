@@ -160,6 +160,8 @@ class CustomHttpClient {
 
   Future<int> login(String username, String password) async {
     final url = Uri.parse(Url.auth);
+    print(
+        "Logging in with username: $username and password: $password and url: $url");
     Map<String, String> payload = Map.from(AuthBody.login(
       username: username,
       password: password,
@@ -171,8 +173,12 @@ class CustomHttpClient {
         body: jsonEncode(payload),
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json',
         },
-      ).timeout(const Duration(seconds: 5));
+      ).timeout(const Duration(seconds: 10));
+
+      print("Login response status: ${response.statusCode}");
+      print("Login response body: ${response.body}");
 
       if (response.statusCode == 200) {
         final body = jsonDecode(response.body);
@@ -191,6 +197,10 @@ class CustomHttpClient {
       return response.statusCode;
     } catch (e) {
       print("Login error: $e");
+      if (e is TimeoutException) {
+        print("Login timeout");
+        return 408; // Request Timeout
+      }
       return 500;
     }
   }
