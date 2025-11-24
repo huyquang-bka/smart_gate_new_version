@@ -1,6 +1,7 @@
 import 'package:smart_gate_new_version/core/configs/api_route.dart';
 import 'package:smart_gate_new_version/core/configs/app_constants.dart';
 import 'package:smart_gate_new_version/core/configs/app_theme.dart';
+import 'package:smart_gate_new_version/core/widgets/ocr_error_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
@@ -126,16 +127,24 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
         });
         widget.onSeal1NumberChanged(recognizedText);
       } else {
-        debugPrint(
-            "Failed to recognize text. Status code: ${response.statusCode}");
+        await _showOcrErrorDialog(
+          "Failed to recognize text. Status code: ${response.statusCode}",
+        );
       }
     } catch (e) {
-      debugPrint("Error occurred during text recognition: $e");
+      await _showOcrErrorDialog("Error occurred during text recognition: $e");
     } finally {
       setState(() {
         _isLoading = false;
       });
     }
+  }
+
+  Future<void> _showOcrErrorDialog(String errorMessage) async {
+    await OcrErrorDialog.show(
+      context: context,
+      errorMessage: errorMessage,
+    );
   }
 
   Future<void> _getImageFromSource(ImageSource source) async {

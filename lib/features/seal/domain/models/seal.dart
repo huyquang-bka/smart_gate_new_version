@@ -21,7 +21,6 @@ class Seal {
   }
 
   Map<String, dynamic>? toJson() {
-    print("-----------Seal: $sealNumber1 $sealNumber2 $cargoType");
     String sealNumber =
         sealNumber1 + (sealNumber2.isNotEmpty ? "/$sealNumber2" : '');
     if (sealNumber.isEmpty || (imagePath == null && savedImagePath.isEmpty)) {

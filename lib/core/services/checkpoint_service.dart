@@ -59,11 +59,6 @@ class CheckpointService {
   static Future<List<CheckPoint>> getSelectedCheckpoints() async {
     final selectedIds = await getSelectedCheckpointIds();
     final allCheckpoints = await getAllCheckpoints();
-    for (var cp in allCheckpoints) {
-      print("Checkpoint: ${cp.toJson()}");
-    }
-    print("*" * 100);
-    print("Number of all Checkpoint: ${allCheckpoints.length}");
     return allCheckpoints
         .where((cp) => selectedIds.contains(cp.id.toString()))
         .toList();
