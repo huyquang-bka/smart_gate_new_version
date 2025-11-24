@@ -463,5 +463,15 @@
     "placeholders": {
       "seal": {}
     }
-  }
+  },
+
+  "@_OCR_ERROR": {},
+  "ocrApiError": "OCR API Error",
+  "ocrApiFailed": "Failed to recognize text from image",
+  "ocrApiErrorMessage": "Unable to process the image. Please try again or enter the seal number manually.",
+  "ocrApiRetry": "Retry",
+  "ocrApiEnterManually": "Enter Manually",
+  "ocrApiTimeout": "OCR service timeout. Please check your connection and try again.",
+  "ocrApiNetworkError": "Network error. Please check your connection and try again.",
+  "ocrApiServerError": "Server error. Please try again later."
 } 

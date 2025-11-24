@@ -46,7 +46,7 @@ class MqttService {
       await client.connect(
           AppConstants.mqttUsername, AppConstants.mqttPassword);
     } on Exception catch (e) {
-      print('EXCEPTION: $e');
+      debugPrint('MQTT connection exception: $e');
       client.disconnect();
       _startReconnectTimer();
     }
@@ -57,7 +57,7 @@ class MqttService {
       _isConnected = true;
       _stopReconnectTimer();
     } else {
-      print(
+      debugPrint(
           'Connection failed - disconnecting client ${client.clientIdentifier} from broker ${AppConstants.mqttBroker} on port ${AppConstants.mqttPort}');
       client.disconnect();
       _startReconnectTimer();
@@ -65,7 +65,7 @@ class MqttService {
   }
 
   void _onConnected() {
-    print('Connected');
+    debugPrint('MQTT connected');
     _isConnected = true;
     _connectionController.add(true);
 
@@ -84,21 +84,21 @@ class MqttService {
   }
 
   void _onDisconnected() {
-    print('Disconnected');
+    debugPrint('MQTT disconnected');
     _isConnected = false;
     _connectionController.add(false);
     _startReconnectTimer();
   }
 
   void _onSubscribed(String topic) {
-    print('Subscribed topic: $topic');
+    debugPrint('Subscribed topic: $topic');
   }
 
   void _startReconnectTimer() {
     _stopReconnectTimer();
     _reconnectTimer = Timer.periodic(const Duration(seconds: 5), (timer) async {
       if (!_isConnected) {
-        print('Attempting to reconnect...');
+        debugPrint('Attempting to reconnect...');
         _initializeClient();
         await connect();
       }
@@ -116,7 +116,7 @@ class MqttService {
     }
     final messageEncode = jsonEncode(message);
     final base64Message = base64Encode(utf8.encode(messageEncode));
-    print('Sending message: $base64Message');
+    debugPrint('Sending message: $base64Message');
     final builder = MqttClientPayloadBuilder();
     builder.addString(base64Message);
     client.publishMessage(topic, MqttQos.atLeastOnce, builder.payload!);

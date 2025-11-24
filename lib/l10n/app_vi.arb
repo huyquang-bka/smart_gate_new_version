@@ -256,5 +256,15 @@
         "type": "Object"
       }
     }
-  } 
-}
+  },
+
+  "@_OCR_ERROR": {},
+  "ocrApiError": "Lỗi API OCR",
+  "ocrApiFailed": "Không thể nhận dạng chữ từ ảnh",
+  "ocrApiErrorMessage": "Không thể xử lý ảnh. Vui lòng thử lại hoặc nhập số seal thủ công.",
+  "ocrApiRetry": "Thử lại",
+  "ocrApiEnterManually": "Nhập thủ công",
+  "ocrApiTimeout": "Hết thời gian chờ dịch vụ OCR. Vui lòng kiểm tra kết nối và thử lại.",
+  "ocrApiNetworkError": "Lỗi mạng. Vui lòng kiểm tra kết nối và thử lại.",
+  "ocrApiServerError": "Lỗi server. Vui lòng thử lại sau."
+} 

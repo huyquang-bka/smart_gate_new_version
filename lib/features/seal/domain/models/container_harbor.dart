@@ -5,6 +5,8 @@ class ContainerHarbor {
   final String checkPointId;
   final String userID;
   final String fullName;
+  final String? containerCode1;
+  final String? containerCode2;
   Seal seal1;
   Seal seal2;
   List<String> additionalImages;
@@ -14,6 +16,8 @@ class ContainerHarbor {
     required this.checkPointId,
     required this.userID,
     required this.fullName,
+    this.containerCode1,
+    this.containerCode2,
     List<String>? additionalImages,
   })  : seal1 = Seal(),
         seal2 = Seal(),
@@ -25,6 +29,8 @@ class ContainerHarbor {
       'CheckPointId': int.tryParse(checkPointId) ?? 0,
       'USERID': int.tryParse(userID) ?? 0,
       'FULLNAME': fullName,
+      "CONTAINERCODE1": containerCode1,
+      "CONTAINERCODE2": containerCode2,
     };
 
     // Add seal1 data if it exists
@@ -59,6 +65,8 @@ class ContainerHarbor {
     String? fullName,
     Seal? seal1,
     Seal? seal2,
+    String? containerCode1,
+    String? containerCode2,
     List<String>? additionalImages,
   }) {
     return ContainerHarbor(
@@ -66,6 +74,8 @@ class ContainerHarbor {
       checkPointId: checkPointId ?? this.checkPointId,
       userID: userID ?? this.userID,
       fullName: fullName ?? this.fullName,
+      containerCode1: containerCode1 ?? this.containerCode1,
+      containerCode2: containerCode2 ?? this.containerCode2,
       additionalImages: additionalImages ?? this.additionalImages,
     )
       ..seal1.imagePath = seal1?.imagePath ?? this.seal1.imagePath
@@ -90,6 +100,6 @@ class ContainerHarbor {
 
   @override
   String toString() {
-    return "ContainerHarbor: $checkPointId $userID $fullName $seal1 $seal2 $additionalImages";
+    return "ContainerHarbor: $checkPointId $userID $fullName $containerCode1 $containerCode2 $seal1 $seal2 $additionalImages";
   }
 }

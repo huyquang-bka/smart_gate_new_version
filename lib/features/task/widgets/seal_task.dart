@@ -46,9 +46,9 @@ class _SealTaskState extends State<SealTask> {
   @override
   void initState() {
     super.initState();
-    print("-----------task: ${widget.task.toJson()}");
-    print("-----------containerCode1: ${widget.task.containerCode1}");
-    print("-----------containerCode2: ${widget.task.containerCode2}");
+    debugPrint('Task details: ${widget.task.toJson()}');
+    debugPrint('Container code 1: ${widget.task.containerCode1}');
+    debugPrint('Container code 2: ${widget.task.containerCode2}');
     _initControllers();
     _initializeContainerHarbor();
   }
@@ -121,6 +121,8 @@ class _SealTaskState extends State<SealTask> {
         checkPointId: widget.task.checkPointId.toString(),
         userID: auth.userId.toString(),
         fullName: auth.fullName,
+        containerCode1: widget.task.containerCode1,
+        containerCode2: widget.task.containerCode2,
       );
       isLoading = false;
     });
@@ -307,7 +309,7 @@ class _SealTaskState extends State<SealTask> {
       }
     }
 
-    print("-----------Container Harbor: ${containerHarbor!}");
+    debugPrint('Container Harbor: ${containerHarbor!}');
     _showLoadingDialog(l10n);
 
     // Upload seal images
@@ -413,7 +415,7 @@ class _SealTaskState extends State<SealTask> {
 
   Future<void> _sendDataViaMqtt() async {
     final jsonData = containerHarbor!.toJson();
-    print("-----------jsonData: $jsonData");
+    debugPrint('Container harbor payload: $jsonData');
     await mqttService.sendMessage(_baseTopic, jsonData);
   }
 

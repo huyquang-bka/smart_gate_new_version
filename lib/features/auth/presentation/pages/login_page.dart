@@ -50,7 +50,7 @@ class _LoginPageState extends State<LoginPage> {
         });
       }
     } catch (e) {
-      print('Error loading credentials: $e'); // Debug print
+      debugPrint('Error loading credentials: $e');
     }
   }
 
@@ -82,7 +82,7 @@ class _LoginPageState extends State<LoginPage> {
         _usernameController.text,
         _passwordController.text,
       );
-      print("Status code: $statusCode");
+      debugPrint('Login status code: $statusCode');
       if (!mounted) return;
       Navigator.pop(context); // Remove loading indicator
 

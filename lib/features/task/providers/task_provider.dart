@@ -50,7 +50,7 @@ class TaskProvider extends ChangeNotifier {
                 recMess.payload.message);
             try {
               final data = json.decode(payload);
-              print("Data from mqtt: $data");
+              debugPrint('Data from mqtt: $data');
               // Handle cargo type message
               if (message.topic == AppConstants.mqttTopicCargoType) {
                 _handleCargoTypeMessage(data);
@@ -106,7 +106,7 @@ class TaskProvider extends ChangeNotifier {
         _tasks.indexWhere((t) => t.checkPointId == checkPointId);
     if (existingIndex != -1) {
       final task = _tasks[existingIndex];
-      print("Message from cargo type: $data");
+      debugPrint('Message from cargo type: $data');
       _tasks[existingIndex] = task.copyWith(
         cargoType1: shouldUpdateCargoType1
             ? data['cargoType1'] as String?
@@ -117,14 +117,14 @@ class TaskProvider extends ChangeNotifier {
         syncSeal1: data['seal1'] as String?,
         syncSeal2: data['seal2'] as String?,
       );
-      print("Task after update cargo type: ${task.toJson()}");
+      debugPrint('Task after update cargo type: ${task.toJson()}');
       notifyListeners();
     }
   }
 
   void _handleGateMessage(Map<String, dynamic> data) async {
     try {
-      print("ContainerGateMessage: $data");
+      debugPrint('ContainerGateMessage: $data');
       final selectedCheckpointIds =
           await CheckpointService.getSelectedCheckpointIds();
       final eventId = data['eventId'] as String;
@@ -145,8 +145,8 @@ class TaskProvider extends ChangeNotifier {
         'cargoType1': 'GP', // Default cargo type
         'cargoType2': 'GP', // Default cargo type
       });
-      print("Task checkPointId: ${task.checkPointId}");
-      print("Selected checkpoint ids: $selectedCheckpointIds");
+      debugPrint('Task checkPointId: ${task.checkPointId}');
+      debugPrint('Selected checkpoint ids: $selectedCheckpointIds');
 
       if (selectedCheckpointIds.contains(task.checkPointId.toString())) {
         // Add event ID to tracking set
@@ -206,7 +206,7 @@ class TaskProvider extends ChangeNotifier {
           portLocation: 0,
         ),
       );
-      print("Checkpoint portLocation: ${checkpoint.portLocation}");
+      debugPrint('Checkpoint portLocation: ${checkpoint.portLocation}');
       // Skip task creation if portLocation is less than 3
       if (checkpoint.portLocation < 3) {
         return;

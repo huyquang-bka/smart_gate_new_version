@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'dart:developer' as developer;
 import 'package:smart_gate_new_version/core/configs/api_route.dart';
 import 'package:smart_gate_new_version/core/services/auth_service.dart';
 import 'package:smart_gate_new_version/core/exceptions/session_expired_exception.dart';
@@ -20,7 +21,7 @@ class CustomHttpClient {
   }
 
   Future<http.Response> get(String endpoint) async {
-    print("Getting data from $endpoint");
+    developer.log('Fetching data from $endpoint', name: 'CustomHttpClient');
     await _initialization;
     final response = await _getRequestWithToken(endpoint);
     if (response.statusCode == 401) {
@@ -153,15 +154,17 @@ class CustomHttpClient {
         throw ServerErrorException('Server error during token refresh');
       }
     } catch (e) {
-      print('Refresh token error: $e');
+      developer.log('Refresh token error: $e', name: 'CustomHttpClient');
     }
     return false;
   }
 
   Future<int> login(String username, String password) async {
     final url = Uri.parse(Url.auth);
-    print(
-        "Logging in with username: $username and password: $password and url: $url");
+    developer.log(
+      'Logging in with username: $username and url: $url',
+      name: 'CustomHttpClient',
+    );
     Map<String, String> payload = Map.from(AuthBody.login(
       username: username,
       password: password,
@@ -177,8 +180,14 @@ class CustomHttpClient {
         },
       ).timeout(const Duration(seconds: 10));
 
-      print("Login response status: ${response.statusCode}");
-      print("Login response body: ${response.body}");
+      developer.log(
+        'Login response status: ${response.statusCode}',
+        name: 'CustomHttpClient',
+      );
+      developer.log(
+        'Login response body: ${response.body}',
+        name: 'CustomHttpClient',
+      );
 
       if (response.statusCode == 200) {
         final body = jsonDecode(response.body);
@@ -196,9 +205,9 @@ class CustomHttpClient {
       }
       return response.statusCode;
     } catch (e) {
-      print("Login error: $e");
+      developer.log('Login error: $e', name: 'CustomHttpClient');
       if (e is TimeoutException) {
-        print("Login timeout");
+        developer.log('Login timeout', name: 'CustomHttpClient');
         return 408; // Request Timeout
       }
       return 500;

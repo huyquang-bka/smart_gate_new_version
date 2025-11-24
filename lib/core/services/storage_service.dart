@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_gate_new_version/core/configs/app_key.dart';
 
@@ -13,12 +14,12 @@ class StorageService {
       if (rememberMe) {
         await prefs.setString(AppKey.savedUsername, username);
         await prefs.setString(AppKey.savedPassword, password);
-        print('Credentials saved successfully'); // Debug print
+        debugPrint('Credentials saved successfully');
       } else {
         await clearLoginCredentials();
       }
     } catch (e) {
-      print('Error saving credentials: $e'); // Debug print
+      debugPrint('Error saving credentials: $e');
     }
   }
 
@@ -29,8 +30,8 @@ class StorageService {
       final username = prefs.getString(AppKey.savedUsername) ?? '';
       final password = prefs.getString(AppKey.savedPassword) ?? '';
 
-      print(
-          'Retrieved credentials - Remember Me: $rememberMe, Has Username: ${username.isNotEmpty}'); // Debug print
+      debugPrint(
+          'Retrieved credentials - Remember Me: $rememberMe, Has Username: ${username.isNotEmpty}');
 
       return {
         'rememberMe': rememberMe,
@@ -38,7 +39,7 @@ class StorageService {
         'password': password,
       };
     } catch (e) {
-      print('Error getting credentials: $e'); // Debug print
+      debugPrint('Error getting credentials: $e');
       return {
         'rememberMe': false,
         'username': '',
@@ -53,9 +54,9 @@ class StorageService {
       await prefs.remove(AppKey.rememberMe);
       await prefs.remove(AppKey.savedUsername);
       await prefs.remove(AppKey.savedPassword);
-      print('Credentials cleared successfully'); // Debug print
+      debugPrint('Credentials cleared successfully');
     } catch (e) {
-      print('Error clearing credentials: $e'); // Debug print
+      debugPrint('Error clearing credentials: $e');
     }
   }
 }

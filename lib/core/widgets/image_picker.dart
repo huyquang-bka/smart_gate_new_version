@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:smart_gate_new_version/core/configs/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -71,7 +72,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
         widget.onImageChanged(pickedFile.path);
       }
     } catch (e) {
-      print('Error picking image: $e');
+      debugPrint('Error picking image: $e');
     } finally {
       setState(() {
         _isLoading = false;
