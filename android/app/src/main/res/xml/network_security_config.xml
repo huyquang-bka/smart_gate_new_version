@@ -7,6 +7,6 @@
         </trust-anchors>
     </base-config>
     <domain-config cleartextTrafficPermitted="false">
-        <domain includeSubdomains="true">172.34.64.10</domain>
+        <domain includeSubdomains="true">https://smartgate.htit.com.vn</domain>
     </domain-config>
 </network-security-config> 
