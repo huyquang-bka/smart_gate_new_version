@@ -1,6 +1,7 @@
 import 'package:smart_gate_new_version/core/configs/api_route.dart';
 import 'package:smart_gate_new_version/core/configs/app_constants.dart';
 import 'package:smart_gate_new_version/core/configs/app_theme.dart';
+import 'package:smart_gate_new_version/core/services/custom_http_client.dart';
 import 'package:smart_gate_new_version/core/widgets/ocr_error_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -114,9 +115,9 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
         await http.MultipartFile.fromPath('file', imageFile.path),
       );
 
-      final response = await request.send().timeout(
-            const Duration(seconds: 5),
-          );
+      // SECURITY (#29501): route through the shared pinned HTTP client so SSL
+      // pinning also covers the seal OCR upload (was a raw request.send()).
+      final response = await customHttpClient.sendMultipartRequest(request);
       if (response.statusCode == 200) {
         final responseBody = await response.stream.bytesToString();
         final jsonData = jsonDecode(responseBody);

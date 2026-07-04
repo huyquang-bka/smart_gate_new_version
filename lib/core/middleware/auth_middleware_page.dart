@@ -1,7 +1,9 @@
 import 'package:smart_gate_new_version/core/configs/app_theme.dart';
 import 'package:smart_gate_new_version/core/routes/routes.dart';
 import 'package:smart_gate_new_version/core/services/auth_service.dart';
+import 'package:smart_gate_new_version/core/services/root_check_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class AuthMiddlewarePage extends StatefulWidget {
   const AuthMiddlewarePage({super.key});
@@ -20,6 +22,16 @@ class _AuthMiddlewarePageState extends State<AuthMiddlewarePage> {
   }
 
   Future<void> _initializeAndRoute() async {
+    // SECURITY (#69301): Root detection. Block rooted devices before routing.
+    final bool isRooted = await rootCheckService.isDeviceRooted();
+    if (!mounted) return;
+    if (isRooted) {
+      await _showRootedDeviceDialog();
+      if (mounted) {
+        SystemNavigator.pop();
+      }
+      return;
+    }
     try {
       // Check auth status
       final auth = await AuthService.getAuth();
@@ -37,6 +49,15 @@ class _AuthMiddlewarePageState extends State<AuthMiddlewarePage> {
         Navigator.of(context).pushReplacementNamed(Routes.login);
       }
     }
+  }
+
+  Future<void> _showRootedDeviceDialog() async {
+    if (!mounted) return;
+    await showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => const _RootedDeviceDialog(),
+    );
   }
 
   @override
@@ -59,6 +80,26 @@ class _AuthMiddlewarePageState extends State<AuthMiddlewarePage> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _RootedDeviceDialog extends StatelessWidget {
+  const _RootedDeviceDialog();
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Unsupported Device'),
+      content: const Text(
+        'This device appears to be rooted. For security reasons the application will close.',
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
+          child: const Text('Close'),
+        ),
+      ],
     );
   }
 }

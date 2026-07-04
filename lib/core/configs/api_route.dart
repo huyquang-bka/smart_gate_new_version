@@ -2,8 +2,12 @@ class ApiRoute {
   // Base URLs
   // static const String baseUrl = "https://crd.atin.vn";
   // static const String aiServiceUrl = "http://27.72.98.49:6299";
-  static const String baseUrl = "http://172.34.64.10:42001";
-  static const String aiServiceUrl = "http://172.34.64.11:6299";
+  //
+  // SECURITY (#31901): endpoints migrated to HTTPS (same domain as branch
+  // check-root). Cleartext is now disabled in AndroidManifest.xml
+  // (usesCleartextTraffic="false") and network_security_config.xml.
+  static const String baseUrl = "https://smartgate.htit.com.vn";
+  static const String aiServiceUrl = "https://smartgate.htit.com.vn";
 }
 
 // URI Paths

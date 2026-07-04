@@ -2,11 +2,12 @@
 <network-security-config>
     <base-config cleartextTrafficPermitted="false">
         <trust-anchors>
+            <!-- SECURITY (#31901): removed <certificates src="user" /> so the app
+                 does NOT trust user-installed CAs (prevents user-added MITM certs). -->
             <certificates src="system" />
-            <certificates src="user" />
         </trust-anchors>
     </base-config>
     <domain-config cleartextTrafficPermitted="false">
-        <domain includeSubdomains="true">172.34.64.10</domain>
+        <domain includeSubdomains="true">smartgate.htit.com.vn</domain>
     </domain-config>
 </network-security-config> 

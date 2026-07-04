@@ -67,3 +67,8 @@ android {
 flutter {
     source = "../.."
 }
+
+dependencies {
+    // SECURITY (#69301): RootBeer for root detection.
+    implementation("com.scottyab:rootbeer-lib:0.1.0")
+}

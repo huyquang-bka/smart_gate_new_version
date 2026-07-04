@@ -23,6 +23,8 @@ dependencies:
   json_annotation: ^4.8.1
   shared_preferences: ^2.2.2
   http: ^1.2.2
+  # SECURITY (#29501): used for SSL public-key/cert pinning (SHA-256).
+  crypto: ^3.0.6
   mqtt_client: ^10.5.1
   image_picker: ^1.0.7
   url_launcher: ^6.3.1
