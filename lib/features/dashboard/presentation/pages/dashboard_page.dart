@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:smart_gate_new_version/l10n/app_localizations.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});

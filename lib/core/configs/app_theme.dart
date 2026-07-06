@@ -93,7 +93,7 @@ class AppTheme {
       foregroundColor: Colors.white,
     ),
     // Card Theme
-    cardTheme: CardTheme(
+    cardTheme: CardThemeData(
       elevation: 2,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),

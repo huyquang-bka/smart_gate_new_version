@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_gate_new_version/features/seal/domain/models/check_point.dart';
 import 'package:smart_gate_new_version/features/task/domain/models/task.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:smart_gate_new_version/l10n/app_localizations.dart';
 import 'package:smart_gate_new_version/features/task/providers/task_provider.dart';
 import 'package:smart_gate_new_version/features/task/widgets/seal_task.dart';
 import 'package:smart_gate_new_version/core/services/checkpoint_service.dart';

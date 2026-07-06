@@ -7,7 +7,7 @@ import 'package:smart_gate_new_version/core/services/mqtt_service.dart';
 import 'package:smart_gate_new_version/features/seal/domain/models/container_harbor.dart';
 import 'package:smart_gate_new_version/features/seal/widgets/seal_container_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:smart_gate_new_version/l10n/app_localizations.dart';
 import 'package:smart_gate_new_version/features/task/domain/models/task.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';

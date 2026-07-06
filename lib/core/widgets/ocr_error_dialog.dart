@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:smart_gate_new_version/l10n/app_localizations.dart';
 
 class OcrErrorDialog extends StatelessWidget {
   final String? errorMessage;

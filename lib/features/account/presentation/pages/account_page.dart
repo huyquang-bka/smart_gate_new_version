@@ -7,7 +7,7 @@ import 'package:smart_gate_new_version/core/routes/routes.dart';
 import 'package:smart_gate_new_version/core/services/custom_http_client.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:smart_gate_new_version/core/providers/language_provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:smart_gate_new_version/l10n/app_localizations.dart';
 import 'dart:convert';
 import 'package:smart_gate_new_version/core/services/checkpoint_service.dart';
 import 'package:smart_gate_new_version/features/seal/domain/models/check_point.dart';
