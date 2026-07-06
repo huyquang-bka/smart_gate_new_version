@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:smart_gate_new_version/l10n/app_localizations.dart';
 import 'package:smart_gate_new_version/features/task/providers/task_provider.dart';
 import 'package:smart_gate_new_version/features/task/domain/models/task.dart';
 

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:smart_gate_new_version/core/configs/app_theme.dart';
 import 'package:smart_gate_new_version/core/services/checkpoint_service.dart';
 import 'package:smart_gate_new_version/features/seal/domain/models/check_point.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:smart_gate_new_version/l10n/app_localizations.dart';
 
 class CheckpointSelectionDialog extends StatefulWidget {
   final List<CheckPoint> checkpoints;
