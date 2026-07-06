@@ -33,8 +33,9 @@ class AppConstants {
   // MQTT Topics
   // static const String mqttBroker = '27.72.98.49';
   // static const int mqttPort = 58883;
-  static const int mqttPort = 1883;
-  static const String mqttBroker = '172.34.64.10';
+  // SECURITY (#31901): MQTT over TLS (8883) to the domain, not plaintext 1883 to an IP.
+  static const int mqttPort = 8883;
+  static const String mqttBroker = 'smartgate-mqtt.htit.com.vn';
   static const String mqttTopicEvent = "Event/Container";
   static const String mqttTopicCargoType = "Event/CargoType";
   static const String mqttTopicCheckSeal = "Event/CheckSeal";
