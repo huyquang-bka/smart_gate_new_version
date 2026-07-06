@@ -7,7 +7,8 @@
             <certificates src="system" />
         </trust-anchors>
     </base-config>
-    <domain-config cleartextTrafficPermitted="false">
-        <domain includeSubdomains="true">smartgate.htit.com.vn</domain>
+    <!-- UAT: allow cleartext (HTTP) ONLY to the internal UAT server IP. -->
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">172.34.64.17</domain>
     </domain-config>
 </network-security-config> 

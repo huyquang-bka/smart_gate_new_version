@@ -3,11 +3,10 @@ class ApiRoute {
   // static const String baseUrl = "https://crd.atin.vn";
   // static const String aiServiceUrl = "http://27.72.98.49:6299";
   //
-  // SECURITY (#31901): endpoints migrated to HTTPS (same domain as branch
-  // check-root). Cleartext is now disabled in AndroidManifest.xml
-  // (usesCleartextTraffic="false") and network_security_config.xml.
-  static const String baseUrl = "https://smartgate.htit.com.vn";
-  static const String aiServiceUrl = "https://smartgate.htit.com.vn";
+  // UAT environment: points to the internal UAT server 172.34.64.17 over HTTP.
+  // Cleartext is permitted ONLY for this IP in network_security_config.xml.
+  static const String baseUrl = "http://172.34.64.17:42001";
+  static const String aiServiceUrl = "http://172.34.64.17:6299";
 }
 
 // URI Paths
